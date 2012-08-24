@@ -1,0 +1,61 @@
+JCL 07Mar26
+
+Crosstalk in PISCES has been corrected by combining 
+a large stack of darks, selecting hot pixels from the combined 
+image, identifying the comet-like ghosts of these hot pixels,
+and fitting the shape of the ghosts along the rows
+in which they occur.  The first crosstalk correction
+script was written by Roelof de Jong in 1999.  The
+correction was re-derived and updated by Jackie Monkiewicz
+in 2004.  The readout has changed since then (what exactly
+has changed?), so I have done a cursory re-check of the 
+correction and have updated it again.
+
+In "xtalk.1.ps" I first compare the de Jong and Monkiewicz
+corrections.  The inset zooms in on the models of tail of the
+comet-like shadow.  The de Jong correction (blue) spans 120 
+pixels from the "pit" of the shadow, whereas the one by 
+Monkiewicz spans 180 pixels (red).  The de Jong recipe  
+will under-correct relative to the Monkiewicz recipe.  
+However, as noted by Craig Kulesa, there are many more 
+parameters in the Monkiewicz recipe, and there are 
+discontinuities where different functions are joined (i.e.,
+the kinks in red curve).  I have tried to fix these problems
+in the new correction (green), which returns to the
+original span of 120 pix.
+
+I have chosen a set of 5 different shadows from an image
+made from the combinations of ~40, 5 sec. darks, and
+plotted them in "xtalk.2.ps" (yellow, blue, green, red
+and black dotted profiles).  The average background
+level, calculated from the 100 pixels to the right of
+the shadow, has been subtracted from each shadow, and
+they have all been scaled by the number of ADU in the
+offending hottest pixel.  Note that all of the profiles
+plotted are formed from the convolution of the shadows of
+TWO adjacent hot pixels, with the left pixel being about
+10 times as bright as its nieghbor on the right.  This
+has been taken into account in the new correction (solid 
+magenta line), which was based on the dotted blue curve.   
+The Monkiewicz correction is also plotted
+(solid black line), and does not fit the new crosstalk
+pattern well in the pit; it leaves an obvious signature
+residual in the corrected image.
+
+
+The variation of the depth of the pit seems to vary with
+the intensity of the offending pixel, and I have not yet
+attempted to correct for this.  The depth of the pit increases
+between 0.2% and 0.3% as the value of the hot pixel varies
+between 6000 and 22000 ADU.  This needs to be addressed.
+
+
+	 hot
+profile  pixel
+color    position    -- pixel values across hot pixel --
+--------------------------------------------------------- 
+black    [168,148]   -- 182 325 2e4   2972 221 184 -- 
+yellow   [358,192]   -- 213 252 6007   950 222 210 --
+blue     [348,634]   -- 170 290 1.7e4 2353 187 165 --
+green    [132,744]   -- 240 375 2e4   2560 263 237 --
+red      [706,899]   -- 441 589 2.2e4 3150 464 430 --
