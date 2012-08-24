@@ -84,6 +84,30 @@ class koiPlusFilter:
 		if (koi == "K00268") & (instr == "ARIES"):
 			self.extraX = self.extraX +20
 			self.extraY = self.extraY -20
+		if (koi == "HAT-P-6b") & (instr == "ARIES"):
+			self.extraX = self.extraX +0
+			self.extraY = self.extraY +20
+		if (koi == "HAT-P-9b") & (instr == "ARIES"):
+			self.extraX = self.extraX +0
+			self.extraY = self.extraY -70
+		if (koi == "HAT-P-30b") & (instr == "ARIES"):
+			self.extraX = self.extraX +20
+			self.extraY = self.extraY -20
+		if (koi == "TrES-1b") & (instr == "ARIES"):
+			self.extraX = self.extraX +20
+			self.extraY = self.extraY -20
+		if (koi == "WASP-2b") & (instr == "ARIES"):
+			self.extraX = self.extraX -20
+			self.extraY = self.extraY -0
+		if (koi == "WASP-33b") & (instr == "ARIES"):
+			self.extraX = self.extraX +0
+			self.extraY = self.extraY - 20
+		if (koi == "XO-4b") & (instr == "ARIES"):
+			self.extraX = self.extraX +20
+			self.extraY = self.extraY -20
+		if (koi == "Corot-1b") & (instr == "ARIES"):
+			self.extraX = self.extraX +0
+			self.extraY = self.extraY -0
 		
 		
 	### Settings for each KOI: what are the ranges in counts for each image
@@ -92,7 +116,7 @@ class koiPlusFilter:
 	def peakScaleFactorForKOI(self,koi,filt,instr):
 		peakScaleFactor={}
 		peakScaleFactor[koi,filt,"PHARO"]=[0,20000]
-		peakScaleFactor[koi,filt,"ARIES"]=[0,10000]
+		peakScaleFactor[koi,filt,"ARIES"]=[0,1000]
 		peakScaleFactor["K00013","J","ARIES"]=[0.001,3000]
 		peakScaleFactor["K00013","Ks","ARIES"]=[-10,3000]
 		peakScaleFactor["K00018","J","PHARO"]=[-10,400]
@@ -130,6 +154,12 @@ class koiPlusFilter:
 		peakScaleFactor["K00975","J","ARIES"]=[-10,1500]
 		peakScaleFactor["K00975","Ks","ARIES"]=[0,1000]
 		peakScaleFactor["K01537","Ks","ARIES"]=[0,12000]
+		peakScaleFactor["HAT-P-9b","Ks","ARIES"]=[0,1000]
+		peakScaleFactor["HAT-P-30b","Ks","ARIES"]=[0,500]
+		peakScaleFactor["HAT-P-33b","Ks","ARIES"]=[0,1000]
+		peakScaleFactor["WASP-2b","Ks","ARIES"]=[0,2000]
+		peakScaleFactor["TrES-1b","Ks","ARIES"]=[0,100]
+		peakScaleFactor["Corot-1b","Ks","ARIES"]=[0,100]
 		return peakScaleFactor[koi,filt,instr]
 	
 	### ARIES does NOT always have E and N in consistent directions
@@ -149,6 +179,16 @@ class koiPlusFilter:
 		rotateBy["K00975",filt,"ARIES"]=[1, True, False]
 		rotateBy["K00258",filt,"ARIES"]=[0, True, False]
 		rotateBy["K01537",filt,"ARIES"]=[1, True, False]
+		rotateBy["Corot-1b",filt,"ARIES"]=[2, True, False]
+		rotateBy["HAT-P-6b",filt,"ARIES"]=[0, True, False]
+		rotateBy["HAT-P-17b",filt,"ARIES"]=[1, True, False]
+		rotateBy["HAT-P-32b",filt,"ARIES"]=[0, True, False]
+		rotateBy["HD17156b",filt,"ARIES"]=[0, True, False]
+		rotateBy["TrES-1b",filt,"ARIES"]=[1, True, False]
+		rotateBy["WASP-1b",filt,"ARIES"]=[1, True, False]
+		rotateBy["WASP-2b",filt,"ARIES"]=[2, True, False]
+		rotateBy["WASP-33b",filt,"ARIES"]=[1, True, False]
+		rotateBy["XO-3b",filt,"ARIES"]=[0, True, False]
 		return rotateBy[koi,filt,instr]
 	
 	### Do you want the images to display colors on a linear or log scale 
@@ -171,20 +211,27 @@ class koiPlusFilter:
 		betterRefNum["K00270","J"]=10
 		betterRefNum["K00974","J"]=5
 		betterRefNum["K01537","Ks"]=5
+		betterRefNum["HAT-P-30b","Ks"]=5
 		return betterRefNum[koi,filt]
 	
 
 	#### Settings for plot sizes, scales
 	## Objects with very close companions should be zooomed in
 	def getZoomedBoxSizeForKOI(self,koi):
-		defaultSizeArcsec = 3.0
+		defaultSizeArcsec = 3.0 ### half-size
+		# 6 arcsec boxes
 		if koi in ["K00098","K00112","K00113","K00264","K00270","K00292","K01537"]:
-			self.lengthScale=0.33
+			self.lengthScale=0.33  ### i.e., 0.33 * 3 = 1" half-size
 			self.labelLengthScale=1.3
 			return defaultSizeArcsec*self.lengthScale
 		elif koi in ["K00094"]:
 			self.lengthScale=4/3.
-			self.labelLengthScale=1.3
+			self.labelLengthScale=1.4
+			return defaultSizeArcsec*self.lengthScale
+		## 4 arcsec boxes
+		elif koi in ["Corot-1b", "HAT-P-17b", "HAT-P-25b","HAT-P-30b", "HAT-P-32b", "HAT-P-33b", "HAT-P-6b", "HAT-P-9b", "HD17156b", "TrES-1b", "WASP-1b", "WASP-2b", "WASP-33b", "XO-3b", "XO-4b"]:
+			self.lengthScale=1.0
+			self.labelLengthScale=1.4
 			return defaultSizeArcsec*self.lengthScale
 		else:	
 			self.lengthScale=1.0

@@ -54,7 +54,7 @@ def addArrows(k,arrowDeltaX,arrowDeltaY,direction,arrowScale=False):
 	labelX1 = k.zoomedBoxHalfSize+k.arrowOffsetX+arrowDeltaX*arrowScale*k.labelLengthScale - 15*k.lengthScale
 	labelY1 = k.zoomedBoxHalfSize+k.arrowOffsetY+arrowDeltaY*arrowScale*k.labelLengthScale - 15*k.lengthScale
 	
-	print "arrowScale", arrowScale, "origin", originX1+k.extraX, originY1+k.extraY, "delta", deltaX1, deltaY1
+#	print "arrowScale", arrowScale, "origin", originX1+k.extraX, originY1+k.extraY, "delta", deltaX1, deltaY1
 		
 	pylab.arrow(originX1+k.extraX, originY1+k.extraY, deltaX1, deltaY1, color="white",head_width=8*k.lengthScale,head_length=8*k.lengthScale)
 	pylab.text(labelX1+k.extraX,labelY1+k.extraY,direction,color="white")

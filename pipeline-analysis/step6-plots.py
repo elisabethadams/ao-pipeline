@@ -195,11 +195,11 @@ def makeSingleImagePrettyPlot(koi, outfile, useFilts=["J","Ks"], useInstr="ARIES
 	if showColorBar:
 		pylab.colorbar(shrink=0.85)
 	pylab.savefig(outfile)
-	pylab.close()
-	
-	
-######################## Some settings for compilation plots I have made ################
+	pylab.close()	
 
+
+######################## Some settings for compilation plots I have made ################
+#### Note that the scalebars are TEXT labels; the actual size of the scalebar is set in the koiPlusFilter class
 
 ### For AJ paper I
 #makeOmniPlot(	["K00013","K00018","K00042","blank","scalebar","K00068","blank","K00097","K00118","K00141","K00258","K00268","K00284","K00285","K00975"],"2",28,ncols=4,scalebarLabel="6\"",plotExt=".eps")
@@ -209,4 +209,15 @@ def makeSingleImagePrettyPlot(koi, outfile, useFilts=["J","Ks"], useInstr="ARIES
 ### Individual objects
 #makeOmniPlot(	["K00258"],"K00258",2,ncols=2,scalebarLabel="xx",plotExt=".eps")
 #makeOmniPlot(	["K00268"],"K00268",2,ncols=2,scalebarLabel="xx",plotExt=".eps")
-makeSingleImagePrettyPlot("K00094", ao.plotDir+"K00094_paper.eps",showColorBar=False,useScaleMin=30,useScaleMax=80, useColorMap=cm.gray, showArrows=True, useArrowScale=2)
+
+############# Make a single image for a paper (using full image view) ##############
+# options:   makeSingleImagePrettyPlot(koi, outfile, useFilts=["J","Ks"], useInstr="ARIES", showColorBar=True, useScaleMin=0, useScaleMax=100,useColorMap=cm.jet, showArrows=True, useArrowScale=1):
+
+#makeSingleImagePrettyPlot("K00094", ao.plotDir+"K00094_paper.eps",showColorBar=False,useScaleMin=30,useScaleMax=80, useColorMap=cm.gray, showArrows=True, useArrowScale=2)
+#makeSingleImagePrettyPlot("K00094", ao.plotDir+"K00094_paper.pdf",showColorBar=False,useScaleMin=30,useScaleMax=80, useColorMap=cm.gray, showArrows=True, useArrowScale=2)
+
+############# How to make multiple plots for a paper (using zoomed-in view) ##############
+# options:  makeOmniPlot(koiList,name,npix,useHalfBox=2.0,ncols=4, scalebarLabel="", noLabels=False, figWidth=12, useFilts=["J","Ks"], useInstr= ["ARIES","PHARO"], plotExt=".pdf"):
+
+#makeOmniPlot(gb.flattenList([useObjects,["scalebar"]]),"nonkep",16,ncols=4,scalebarLabel="6\"",plotExt=".pdf")
+makeOmniPlot(gb.flattenList([useObjects,["scalebar"]]),"nonkep",16,ncols=4,scalebarLabel="6\"",plotExt=".eps")
