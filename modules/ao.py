@@ -21,7 +21,9 @@ mainDir="/Users/era/Research/Projects/Kepler/AO/"
 infoDir=mainDir+"info/"
 
 #### All processing scripts (e.g. this pipeline) live here or in subfolders
-# Note that the ao-pipeline-dir/ is also a github repository
+# Note that the ao-pipeline-dir/ is also a github repository:
+#          https://github.com/elisabethadams/ao-pipeline.git
+# You'll need to have the data locally so it will run, though
 scriptDir = mainDir+"ao-pipeline/"
 pipelineReductionDir = scriptDir+"pipeline-reduction/"
 pipelineAnalysisDir = scriptDir+"pipeline-analysis/"

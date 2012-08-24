@@ -1,0 +1,16 @@
+README
+AO reduction project
+2012-08-24
+Elisabeth Adams
+
+This project actually contains two related pipelines: one to take raw data and turn it into finished fits images (one for each object and filter), and the second to find the point sources and detection limits of each finished fits file and spit out the tables and plots you want to publish.
+
+The first is called pipeline-analysis
+The second is called pipeline-reduction
+Both of them use the python packages in modules
+More detailed instructions for each pipeline are stored under each subdirectory (.pages files for formatting, .pdfs for reading)
+
+By necessity, the data are stored outside this github repository. So are the results that are created by this script.
+
+Giant caveat: since all of the directory shuffling is still a work in progress, there are likely a bunch of bugs relating to files not quite being where they ought. 
+
