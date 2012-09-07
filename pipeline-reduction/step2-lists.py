@@ -12,30 +12,46 @@
 #    5. create a list of all objects on a given night in each filter
 #	Note: objects are stripped of _, " ", "/", and are uppercased
 
+################## BEGIN PREAMBLE ###########################
+
 import os
+import sys
 import string
 
-## local packages
+## User packages
+pipelineDir = os.path.dirname(os.path.realpath(__file__))
+print "This script is stored at:",pipelineDir
+moduleDir = string.replace(pipelineDir,"pipeline-reduction","modules")
+print "Adding modules from:",moduleDir
+sys.path.append(moduleDir) 
+import ao
 import aries
 import grabBag as gb
 
-##### Definitions
-### Pick which night to use
-useNight = "20111008"
-allNights = aries.framesForNights.keys()
+### Read in which objects to use
+if os.path.exists("usingDate.txt"):
+	data = open("usingDate.txt","r")
+	useDates = []
+	lines = data.readlines()
+	for line in lines:
+		useDates.append(line.rstrip())
+	# Only use the first one
+	useNight = useDates[0]
+else:
+	sys.exit("I don't know what date to analyze. Please run step0-setup.py")
 
 nightPath = ao.dataDir + useNight + "/"
+base = aries.targetBaseName[useNight]
+print "Night path:",nightPath, " file name base:", base
+################### END PREAMBLE ############################
 
-def cleanse(obj,toUpper=False):
-	for char in ["_"," ","/"]:
-		obj = string.replace(obj,char,"")
-	if toUpper:
-		return string.upper(obj)
-	else:
-		return obj
 
-## all files in that directory
+frameNumbers = aries.framesForNights.keys()
+
+## list all files in the night directory
 allFiles = os.listdir(nightPath)
+print "\n Running through all ", len(allFiles)," files to find data..."
+
 allObjDict={}
 allSkiesByExp={}
 allDarkDict={}; allDarkTimes = []
@@ -47,9 +63,9 @@ for ff in allFiles:
 		
 		##### A. Target data (all starts with 'q')
 		if ff[0] == "q":
-			exp= cleanse(ao.getStuffFromHeader(nightPath+ff,"EXPTIME"))
-			filt = cleanse(string.replace(ao.getStuffFromHeader(nightPath+ff,"FILTER"),"band", ""))
-			obj = cleanse(ao.getStuffFromHeader(nightPath+ff,"OBJECT"),toUpper=True)
+			exp= gb.cleanse(ao.getStuffFromHeader(nightPath+ff,"EXPTIME"))
+			filt = gb.cleanse(string.replace(ao.getStuffFromHeader(nightPath+ff,"FILTER"),"band", ""))
+			obj = gb.cleanse(ao.getStuffFromHeader(nightPath+ff,"OBJECT"),toUpper=True)
 			## Create dictionary of objects by object, filter	
 			if (obj, filt) not in allObjDict.keys():
 				#print "New object, filter:",obj, filt
@@ -58,7 +74,7 @@ for ff in allFiles:
 				allObjDict[obj,filt].append(ff)
 			## Finally, make list of all frames by filter for each night
 			num = int(ff[7:11])
-			for nn in allNights:
+			for nn in frameNumbers:
 				if (aries.framesForNights[nn][0] <= num <= aries.framesForNights[nn][1]):
 					if (nn, filt) not in nightAndFilterDict.keys():
 						nightAndFilterDict[nn,filt] =[ff]
@@ -87,55 +103,69 @@ for ff in allFiles:
 				allSkiesByExp[exp]=[]
 			allSkiesByExp[exp].append([ff,"sky"])
 
+print "\n We found the following objects and filters:",allObjDict.keys()
+print "\n We found the following sky filters:",allSkyDict.keys()
+print "\n We found the following dark times:",allDarkDict.keys()
+print "\n We found the following sky times:",allSkiesByExp.keys()
 
 
-## Print targets to lists based on filters, exptimes
-#print "Creating lists of skies with ",len(allSkiesByExp.keys())," exposures..."
-##print "Keys:",allSkiesByExp.keys()
-#for exp in allSkiesByExp.keys():
-#	g=open(nightPath+"allSkyD_"+exp+".txt","w")
-#	#print exp, len(allSkiesByExp[exp])
-#	for ff, obj in allSkiesByExp[exp]:
-#		print >>g, ff
-#	g.close()
 
-## Print darks to lists based on exptimes
-#print "Creating lists for darks with ",len(allDarkDict.keys())," exposures..."
-##print "Keys:",allDarkDict.keys()
-#for exp in allDarkDict.keys():
-#	g=open(nightPath+"allDark_"+exp+".txt","w")
-#	#print exp, len(allDarkDict[exp])
-#	for ff in allDarkDict[exp]:
-#		print >>g, ff
-#	g.close()
-	
-## Print skys to lists based on exptimes, filters
-#print "Creating lists for skies with ",len(allSkyDict.keys())," filters..."
-##print "Keys:",allSkyDict.keys()
-#for filt in allSkyDict.keys():
-#	g=open(nightPath+"allSky_"+filt+".txt","w")
-#	#print filt, len(allSkyDict[filt])
-#	for ff in allSkyDict[filt]:
-#		print >>g, ff
-#	g.close()
+######## Print targets to lists based on filters, exptimes ######## 
+entry = raw_input("Create lists of skies with "+str(len(allSkiesByExp.keys()))+" exposures? Type y or anything else to skip: ")
 
-## Print lists for each object and filter
-#print "Creating lists for targets with ",len(allObjDict.keys())," objects..."
-##print "Keys:",allObjDict.keys()
-#for obj,filt in allObjDict.keys():
-#	g=open(nightPath+"allObj_"+obj+"_"+filt+".txt","w")
-#	#print obj, filt, len(allObjDict[obj,filt])
-#	for ff in allObjDict[obj,filt]:
-#		print >>g, ff
-#	g.close()
+if entry == "Y":
+	#print "Keys:",allSkiesByExp.keys()
+	for exp in allSkiesByExp.keys():
+		g=open(nightPath+"allSkyD_"+exp+".txt","w")
+		#print exp, len(allSkiesByExp[exp])
+		for ff, obj in allSkiesByExp[exp]:
+			print >>g, ff
+		g.close()
 
+########  Print darks to lists based on exptimes ######## 
+entry = raw_input("Create lists for darks with "+str(len(allDarkDict.keys()))+" exposures? Type y or anything else to skip: ")
 
-## Print lists for each night and filter
-print "Creating lists for targets with ",len(nightAndFilterDict.keys())," filters and nights..."
-#print "Keys:",nightAndFilterDict.keys()
-for nn,filt in nightAndFilterDict.keys():
-	g=open(nightPath+nn+"_"+filt+".txt","w")
-	#print obj, filt, len(nightAndFilterDict[nn,filt])
-	for ff in sorted(nightAndFilterDict[nn,filt]):
-		print >>g, ff
-	g.close()
+if entry == "Y":
+	#print "Keys:",allDarkDict.keys()
+	for exp in allDarkDict.keys():
+		g=open(nightPath+"allDark_"+exp+".txt","w")
+		#print exp, len(allDarkDict[exp])
+		for ff in allDarkDict[exp]:
+			print >>g, ff
+		g.close()
+
+########  Print skies to lists based on exptimes, filters ######## 
+entry = raw_input("Create lists for skies with "+str(len(allSkyDict.keys()))+" filters? Type y or anything else to skip: ")
+
+if entry == "Y":
+	#print "Keys:",allSkyDict.keys()
+	for filt in allSkyDict.keys():
+		g=open(nightPath+"allSky_"+filt+".txt","w")
+		#print filt, len(allSkyDict[filt])
+		for ff in allSkyDict[filt]:
+			print >>g, ff
+		g.close()
+
+########  Print lists for each object and filter ######## 
+entry = raw_input("Create lists for targets with "+str(len(allObjDict.keys()))+" objects? Type y or anything else to skip: ")
+
+if entry == "Y":
+	#print "Keys:",allObjDict.keys()
+	for obj,filt in allObjDict.keys():
+		g=open(nightPath+"allObj_"+obj+"_"+filt+".txt","w")
+		#print obj, filt, len(allObjDict[obj,filt])
+		for ff in allObjDict[obj,filt]:
+			print >>g, ff
+		g.close()
+
+########  Print lists for each night and filter ######## 
+entry = raw_input("Create lists for targets with "+str(len(nightAndFilterDict.keys()))+" filters and nights? Type y or anything else to skip: ")
+
+if entry == "Y":
+	#print "Keys:",nightAndFilterDict.keys()
+	for nn,filt in nightAndFilterDict.keys():
+		g=open(nightPath+nn+"_"+filt+".txt","w")
+		#print obj, filt, len(nightAndFilterDict[nn,filt])
+		for ff in sorted(nightAndFilterDict[nn,filt]):
+			print >>g, ff
+		g.close()

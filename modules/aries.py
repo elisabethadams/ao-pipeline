@@ -45,8 +45,8 @@ nightDir = "20091108"
 targetBaseName[nightDir] = "star"
 
 ######### What is the path to the data?
-def nightPathForObj(obj):
-	if night == "2011"
+#def nightPathForObj(obj):
+#	if night == "2011"
 
 ######## Which frames contained good data (EXCLUDE calibration data)
 framesForNights={}

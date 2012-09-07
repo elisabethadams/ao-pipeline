@@ -9,26 +9,44 @@
 #    4. combine each sky frame by filter into a master sky
 #    5. divide the target data by the appropriate master sky
 
-import os
-import string
-from pyraf import iraf
+################## BEGIN PREAMBLE ###########################
 
-## local packages
+import os
+import sys
+import string
+
+## User packages
+pipelineDir = os.path.dirname(os.path.realpath(__file__))
+print "This script is stored at:",pipelineDir
+moduleDir = string.replace(pipelineDir,"pipeline-reduction","modules")
+print "Adding modules from:",moduleDir
+sys.path.append(moduleDir) 
+import ao
 import aries
 import grabBag as gb
 
+### Read in which objects to use
+if os.path.exists("usingDate.txt"):
+	data = open("usingDate.txt","r")
+	useDates = []
+	lines = data.readlines()
+	for line in lines:
+		useDates.append(line.rstrip())
+	# Only use the first one
+	useNight = useDates[0]
+else:
+	sys.exit("I don't know what date to analyze. Please run step0-setup.py")
 
-### Pick which night to use
-useNight = "20111008"
-nightPath = aries.mainDataPath + useNight + "/"
+nightPath = ao.dataDir + useNight + "/"
 base = aries.targetBaseName[useNight]
+print "Night path:",nightPath, " file name base:", base
+################### END PREAMBLE ############################
 
-## Now change to that directory
+## List all files in the night directory
+allFiles = os.listdir(nightPath)
+## Now change to the night directory
 os.chdir(nightPath)
 
-
-## List all files in that directory
-allFiles = os.listdir(nightPath)
 darkExptimes=[]
 for ff in allFiles:
 	if ((ff[:7]=="allDark") & (ff[-1] != "~")):
@@ -85,9 +103,7 @@ for ff in allFiles:
 
 ####### Now we flatten our data
 ####### NOTE: WE DO NOT DARK-SUBTRACT DATA; that is taken care of in sky-subtraction
-#for ff in allFiles:
-for ff in ["allObj_DGTAU_FeII1.64_night2.txt", "allObj_RYTAU_FeII1.64_night2.txt","allObj_DGTAU_FeII1.64_night1.txt", "allObj_RWAUR_FeII1.64_night2.txt"]:
-
+for ff in allFiles:
 	if ((ff[:6] == "allObj") & (ff[-1] != "~")):
 		elems=ff.split("_")
 		obj = elems[1]

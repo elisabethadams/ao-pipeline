@@ -48,6 +48,7 @@ for obj in objectDirListing:
 	if os.path.isdir(ao.objectsDir+obj):
 		allObjects.append(obj)
 
+### Now pick which to use
 print "All available objects:",allObjects
 print "\n Which objects should be run?"
 print "1 -- ALL"

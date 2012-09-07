@@ -7,8 +7,9 @@ import os
 import math
 import numpy as np
 import pylab
+import string
 
-#### Interacting with files
+############### Interacting with files ##########################
 def createIfAbsent(myDir):
 	if not os.path.exists(myDir):
 		os.makedirs(myDir)
@@ -23,7 +24,7 @@ def deleteIfPresent(file):
 		os.remove(file)
 	except:
 		0
-		
+
 ### Read in list of sliced data 
 def readListFile(listfile):
 	data=open(listfile)
@@ -33,16 +34,15 @@ def readListFile(listfile):
 		elems=line.rstrip()
 		elemList.append(elems)
 	return elemList
-		
-### List interactions		
+
+################# Interacting with lists ########################
 def flattenList(myList):
 	return [item for sublist in myList for item in sublist]	
 
-## item position
+## item position in list
 def position(myList, value):
 	return [i for i,x in enumerate(myList) if x == value]
 	
-
 # return unique items in list
 # function f5 from http://www.peterbe.com/plog/uniqifiers-benchmark	
 def unique(seq, idfun=None): 
@@ -60,7 +60,8 @@ def unique(seq, idfun=None):
 		seen[marker] = 1
 		result.append(item)
 	return result
-	
+
+####################### Interacting with strings ##################	
 ### String padding
 
 def strPad(exp,roundBy,minLen,padChar=" ",padSide="right"):
@@ -75,7 +76,18 @@ def strPad(exp,roundBy,minLen,padChar=" ",padSide="right"):
 			foo = padChar*(minLen-len(foo)) + foo			
 	return foo
 
-###### Geometry
+
+## Purge a string of set of characters
+def cleanse(obj,charList=["_"," ","/"],toUpper=False):
+	if isinstance(obj, str):
+		for char in charList:
+			obj = string.replace(obj,char,"")
+			if toUpper:
+				return string.upper(obj)
+	return obj
+
+
+############################ Geometry ##########################
 def distanceWithErrors(x,y,xErr,yErr,verbose=False):
 	xySqrSum = x**2 + y**2
 	dist = math.sqrt(xySqrSum)

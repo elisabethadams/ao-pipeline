@@ -15,7 +15,8 @@ import grabBag as gb
 #### Main folder that houses this project
 #mainDir="/data/dupree7/eadams/"
 #mainDir="/Remote/From_DUPREE7/"
-mainDir="/Users/era/Research/Projects/Kepler/AO/"
+#mainDir="/Users/era/Research/Projects/Kepler/AO/"
+mainDir="/Users/era/Research/From_Ginshiro/AO/"
 
 #### Information from other sources (e.g. 2MASS) lives here
 infoDir=mainDir+"info/"
@@ -215,23 +216,35 @@ def chunkIt(seq, num):
 
 ###### Get items from header
 
+# In Aug 2012 ascardlist was deprecated, and new header functionality is described in
+#            http://stsdas.stsci.edu/download/docs/The_PyFITS_Handbook.pdf
+# We're still using it because I don't know what old version of python is on the CF machines
 def getStuffFromHeader(fitsfile,keyword,verbose=False):
 	hdulist = pyfits.open(fitsfile)
 	hdulist.close()
+	hdulist.verify('silentfix')
 	ff = hdulist[0].header.ascardlist()
-	for item in ff:
-		if str(item).startswith(keyword):
-			value=str(item).rstrip().split("=")[1]
+	bar = hdulist[0].header.keys()
+	value = "NA"
+	for nn,item in enumerate(ff):
+		#print "\nxx",bar[nn]
+		if str(bar[nn]).startswith(keyword):
+			value=gb.cleanse(str(item).rstrip().split("=")[1], charList=["\'"," "])
 	if verbose:
-		print "Reading header of",fitsfile,value
+		print "Reading header of",fitsfile,keyword,value
 	return value
+
+
+
 
 def getPlateScaleFromHeader(fitsfile,verbose=False):
 	cameraMode =string.replace(getStuffFromHeader(fitsfile,"CAMERA")," ","")
-	if (cameraMode=="F/15") | (cameraMode=="f/15") | (cameraMode=="f15"):
+	if (cameraMode=="F/15") | (cameraMode=="f/15") | (cameraMode=="f15") | (cameraMode=="F15"):
 		plateScale = 0.0417
-	else:
+	elif (cameraMode=="F/30") | (cameraMode=="f/30") | (cameraMode=="f30") | (cameraMode=="F30"):
 		plateScale = 0.02085
+	else:
+		plateScale = 0
 	return plateScale
 
 

@@ -10,29 +10,49 @@
 #    2. centroid the brightest object to use for stacking in 2nd pass
 #    3. give you statistics so you can reject passed on some FWHM criteria (NOT YET)
 
-import os
-import string
-from pyraf import iraf
+################# BEGIN PREAMBLE ###########################
 
-## local packages
+import os
+import sys
+import string
+
+## User packages
+pipelineDir = os.path.dirname(os.path.realpath(__file__))
+print "This script is stored at:",pipelineDir
+moduleDir = string.replace(pipelineDir,"pipeline-reduction","modules")
+print "Adding modules from:",moduleDir
+sys.path.append(moduleDir) 
+import ao
 import aries
 import grabBag as gb
 
+### Read in which objects to use
+if os.path.exists("usingDate.txt"):
+	data = open("usingDate.txt","r")
+	useDates = []
+	lines = data.readlines()
+	for line in lines:
+		useDates.append(line.rstrip())
+	# Only use the first one
+	useNight = useDates[0]
+else:
+	sys.exit("I don't know what date to analyze. Please run step0-setup.py")
 
-### Pick which night to use
-useNight = "20111008"
-nightPath = aries.mainDataPath + useNight + "/"
+nightPath = ao.dataDir + useNight + "/"
 base = aries.targetBaseName[useNight]
+print "Night path:",nightPath, " file name base:", base
+################### END PREAMBLE ############################
+
 allNights = aries.framesForNights.keys()
 nightlyFilterDict={}
 for nn in allNights:
 	nightlyFilterDict[nn]=[]
 
-
 ## Now change to that directory
 os.chdir(nightPath)
 
-## Make a new bad pixel map
+## Copy the blank bad pixel map over the copy in the data directory
+## We're not really using the bad pixel map these days. 
 makeNewBPM=False
 if makeNewBPM == True:
 	if os.path.exists("BPM1.fits"):
@@ -40,13 +60,9 @@ if makeNewBPM == True:
 	os.system("cp ../pipeline/blankBPM1.fits ./BPM1.fits")
 
 
+### Sadly, xmosaic does not work with 
 
-#### Hack: have to do this by hand for now
-#print "Stupid pyraf and xmosaic won't play nice yet, so we'll do this by hand."
-#print "Open iraf and change to:",nightPath
-#print "Load: xdimsum"
-
-### .cl file that will contain all objects that need xmosaic
+### Create .cl file that will contain all objects that need xmosaic
 print "An iraf script called skysub.cl has been created."
 print "It will run xmosaic once for each filter (and night)."
 print "  To invoke from within iraf, in the data directory type:"
@@ -75,7 +91,4 @@ for ff in allFiles:
 		#print "Reference frame:",refFrame
 		ext1="try1"
 		shiftListFile="NA"
-		#iraf.xmosaic(inlist="@allObj_K979_Ks.txt", reference=refFrame, output="try1", fp_xslm="yes", fp_maskfix="yes", fp_xzap="yes", fp_badpixupdate="no", fp_xnregistar="no", mp_mkmask="no", mp_maskdereg="no", mp_xslm="no", mp_maskfix="no", mp_xzap="no", mp_badpixupdate="no", mp_xnregistar="no", nmean=9)
-#		iraf.xmosaic(inlist="@allObj_K979_Ks.txt//.red", reference="qtarget0575.red.fits",output="try1",shiftlist="NA", expmap = ".exp",nmean=5,Stdin=["\n"])
-		#iraf.xmosaic(Stdin=["\n"])
 		print >>outIRAF, " xmos inlist=\"@"+ff+"//.red\" reference=\""+refFrame+"\" output=\""+ext1+"\" shiftlist=\"NA\" expmap=\".exp\" nmean=11 \n"
