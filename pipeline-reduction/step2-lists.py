@@ -41,7 +41,10 @@ else:
 	sys.exit("I don't know what date to analyze. Please run step0-setup.py")
 
 nightPath = ao.dataDir + useNight + "/"
-base = aries.targetBaseName[useNight]
+try:
+	base = aries.targetBaseName[useNight]
+except KeyError:
+	sys.exit("Information for night",useNight," is not in the aries module.")
 print "Night path:",nightPath, " file name base:", base
 ################### END PREAMBLE ############################
 
@@ -59,13 +62,13 @@ allSkyDict={}
 nightAndFilterDict={}
 for ff in allFiles:
 	##### First check to make sure we don't include reduced fits files
-	if ((ff[-5:]==".fits") & (ff[-7:]!=".d.fits") & (ff[-9:]!=".red.fits")): 
+	if ((ff[-5:]==".fits") & (ff[-7:]!=".d.fits") & (ff[-9:]!=".red.fits") & (ff[-9:]!=".sub.fits")): 
 		
 		##### A. Target data (all starts with 'q')
 		if ff[0] == "q":
 			exp= gb.cleanse(ao.getStuffFromHeader(nightPath+ff,"EXPTIME"))
 			filt = gb.cleanse(string.replace(ao.getStuffFromHeader(nightPath+ff,"FILTER"),"band", ""))
-			obj = gb.cleanse(ao.getStuffFromHeader(nightPath+ff,"OBJECT"),toUpper=True)
+			obj = aries.getProperName(ao.getStuffFromHeader(nightPath+ff,"OBJECT"))
 			## Create dictionary of objects by object, filter	
 			if (obj, filt) not in allObjDict.keys():
 				#print "New object, filter:",obj, filt
@@ -73,7 +76,9 @@ for ff in allFiles:
 			else:
 				allObjDict[obj,filt].append(ff)
 			## Finally, make list of all frames by filter for each night
-			num = int(ff[7:11])
+			start = len(base)+1
+			end = start + 4
+			num = int(ff[start:end])
 			for nn in frameNumbers:
 				if (aries.framesForNights[nn][0] <= num <= aries.framesForNights[nn][1]):
 					if (nn, filt) not in nightAndFilterDict.keys():
@@ -113,7 +118,7 @@ print "\n We found the following sky times:",allSkiesByExp.keys()
 ######## Print targets to lists based on filters, exptimes ######## 
 entry = raw_input("Create lists of skies with "+str(len(allSkiesByExp.keys()))+" exposures? Type y or anything else to skip: ")
 
-if entry == "Y":
+if string.upper(entry) == "Y":
 	#print "Keys:",allSkiesByExp.keys()
 	for exp in allSkiesByExp.keys():
 		g=open(nightPath+"allSkyD_"+exp+".txt","w")
@@ -121,11 +126,13 @@ if entry == "Y":
 		for ff, obj in allSkiesByExp[exp]:
 			print >>g, ff
 		g.close()
+else:
+	print "Skipping"
 
 ########  Print darks to lists based on exptimes ######## 
 entry = raw_input("Create lists for darks with "+str(len(allDarkDict.keys()))+" exposures? Type y or anything else to skip: ")
 
-if entry == "Y":
+if string.upper(entry) == "Y":
 	#print "Keys:",allDarkDict.keys()
 	for exp in allDarkDict.keys():
 		g=open(nightPath+"allDark_"+exp+".txt","w")
@@ -133,11 +140,13 @@ if entry == "Y":
 		for ff in allDarkDict[exp]:
 			print >>g, ff
 		g.close()
+else:
+	print "Skipping"
 
 ########  Print skies to lists based on exptimes, filters ######## 
 entry = raw_input("Create lists for skies with "+str(len(allSkyDict.keys()))+" filters? Type y or anything else to skip: ")
 
-if entry == "Y":
+if string.upper(entry) == "Y":
 	#print "Keys:",allSkyDict.keys()
 	for filt in allSkyDict.keys():
 		g=open(nightPath+"allSky_"+filt+".txt","w")
@@ -145,23 +154,28 @@ if entry == "Y":
 		for ff in allSkyDict[filt]:
 			print >>g, ff
 		g.close()
+else:
+	print "Skipping"
 
 ########  Print lists for each object and filter ######## 
 entry = raw_input("Create lists for targets with "+str(len(allObjDict.keys()))+" objects? Type y or anything else to skip: ")
 
-if entry == "Y":
+if string.upper(entry) == "Y":
 	#print "Keys:",allObjDict.keys()
 	for obj,filt in allObjDict.keys():
 		g=open(nightPath+"allObj_"+obj+"_"+filt+".txt","w")
-		#print obj, filt, len(allObjDict[obj,filt])
+		print obj, filt, len(allObjDict[obj,filt])
 		for ff in allObjDict[obj,filt]:
 			print >>g, ff
 		g.close()
+else:
+	print "Skipping"
+		
 
 ########  Print lists for each night and filter ######## 
 entry = raw_input("Create lists for targets with "+str(len(nightAndFilterDict.keys()))+" filters and nights? Type y or anything else to skip: ")
 
-if entry == "Y":
+if string.upper(entry) == "Y":
 	#print "Keys:",nightAndFilterDict.keys()
 	for nn,filt in nightAndFilterDict.keys():
 		g=open(nightPath+nn+"_"+filt+".txt","w")
@@ -169,3 +183,5 @@ if entry == "Y":
 		for ff in sorted(nightAndFilterDict[nn,filt]):
 			print >>g, ff
 		g.close()
+else:
+	print "Skipping"

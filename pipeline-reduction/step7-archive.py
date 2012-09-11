@@ -9,58 +9,66 @@
 #    1. center main object to create shiftlist for combining frames
 #    2. run final pass through xmosaic to combine individual objects
 
-import os
-import string
-from pyraf import iraf
+################# BEGIN PREAMBLE ###########################
 
-## local packages
+import os
+import sys
+import string
+
+## User packages
+pipelineDir = os.path.dirname(os.path.realpath(__file__))
+print "This script is stored at:",pipelineDir
+moduleDir = string.replace(pipelineDir,"pipeline-reduction","modules")
+print "Adding modules from:",moduleDir
+sys.path.append(moduleDir) 
+import ao
 import aries
 import grabBag as gb
 
+### Read in which objects to use
+if os.path.exists("usingDate.txt"):
+	data = open("usingDate.txt","r")
+	useDates = []
+	lines = data.readlines()
+	for line in lines:
+		useDates.append(line.rstrip())
+	# Only use the first one
+	useNight = useDates[0]
+else:
+	sys.exit("I don't know what date to analyze. Please run step0-setup.py")
 
-### Pick which night to use
-useNight = "20111008"
 nightPath = ao.dataDir + useNight + "/"
 base = aries.targetBaseName[useNight]
+print "Night path:",nightPath, " file name base:", base
+################### END PREAMBLE ############################
+
 allNights = aries.framesForNights.keys()
 nightlyFilterDict={}
 for nn in allNights:
 	nightlyFilterDict[nn]=[]
 
-### Pick an object (next: read it in from command line)
-#
-allProperNamesKs = ["ABAur", "CQTau", "Corot-1b", "DGTau", "HAT-P-17b", "HAT-P-25b", "HAT-P-30b", "HAT-P-32b", "HAT-P-33b", "HAT-P-6b", "HAT-P-9b", "HD17156b", "IQAur", "K00174", "K00341", "K00555", "K00638", "K00700", "K00961", "K00973", "K00979", "K01054", "K01316", "K01537", "K01883", "RWAur", "RYTau", "TTau", "TrES-1b", "WASP-1b", "WASP-2b", "WASP-33b", "XO-3b", "XO-4b"]
-allProperNamesJ = ["RYTau"]
-allProperNamesFe = ["CQTau", "DGTau", "RWAur",  "RYTau"]
-allProperNamesH2 = ["DGTau", "RWAur", "RYTau", "TTau"]
-allProperNamesBr = ["DGTau"]
 
-properName = allProperNamesKs
-filt = "Ks"
-properName = allProperNamesJ
-filt = "J"
-properName = allProperNamesFe
-filt = "FeII1.64"
-properName = allProperNamesBr
-filt = "BrG2.16"
-properName = allProperNamesH2
-filt = "H22.12"
+##### Read in the object(s) used in step5
+if os.path.exists("usingObjLists.txt"):
+	data = open("usingObjLists.txt","r")
+	useObjList = []
+	properName = []
+	lines = data.readlines()
+	for line in lines:
+		objList = line.rstrip()
+		useObjList.append(objList)
+		properName.append(aries.getProperNameForAllObjFile(objList))
+	print "Using object lists:",useObjList
+else:
+	sys.exit("I don't know what objects to analyze. Please run step5-objects.py")
 
 
-
-useObjList=[]
-for xx in properName:
-	useObjList.append("allObj_"+xx+"_"+filt+"_use.txt")
-
-print useObjList
-
-
-## Now change to that directory
+## Now change to the night directory
 os.chdir(nightPath)
 
 
 ## Copy all files to objects/OBJECT/FILTER/
-g = open("summary_"+filt+".txt","w")
+g = open("summary_"+useNight+".txt","w")
 for nn,ff in enumerate(useObjList):
 	prefix, obj, filt, suffix = ff.split("_")
 	objDir = aries.mainObjectPath+obj+"/"

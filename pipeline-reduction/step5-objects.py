@@ -9,43 +9,104 @@
 #    1. center main object to create Shiftlist for combining frames
 #    2. run final pass through xmosaic to combine individual objects
 
-import os
-import string
-from pyraf import iraf
+################# BEGIN PREAMBLE ###########################
 
-## local packages
+import os
+import sys
+import string
+
+## User packages
+pipelineDir = os.path.dirname(os.path.realpath(__file__))
+print "This script is stored at:",pipelineDir
+moduleDir = string.replace(pipelineDir,"pipeline-reduction","modules")
+print "Adding modules from:",moduleDir
+sys.path.append(moduleDir) 
+import ao
 import aries
 import grabBag as gb
 
+### Read in which objects to use
+if os.path.exists("usingDate.txt"):
+	data = open("usingDate.txt","r")
+	useDates = []
+	lines = data.readlines()
+	for line in lines:
+		useDates.append(line.rstrip())
+	# Only use the first one
+	useNight = useDates[0]
+else:
+	sys.exit("I don't know what date to analyze. Please run step0-setup.py")
 
-### Pick which night to use
-useNight = "20111008"
 nightPath = ao.dataDir + useNight + "/"
 base = aries.targetBaseName[useNight]
+print "Night path:",nightPath, " file name base:", base
+################### END PREAMBLE ############################
+
 allNights = aries.framesForNights.keys()
 nightlyFilterDict={}
 for nn in allNights:
 	nightlyFilterDict[nn]=[]
 
-### Pick an object (next: read it in from command line)
-allObjList = ["allObj_COROT1B_Ks.txt", "allObj_CQTAU_Ks.txt", "allObj_DGTAU_Ks.txt","allObj_HATP6B_Ks.txt", "allObj_HATP17B_Ks.txt", "allObj_HATP25B_Ks.txt",  "allObj_HATP30B_Ks.txt", "allObj_HATP32B_Ks.txt", "allObj_HATP33B_Ks.txt", "allObj_HD17156B_Ks.txt", "allObj_IQAUR_Ks.txt", "allObj_K174_Ks.txt", "allObj_K341_Ks.txt", "allObj_K555_Ks.txt","allObj_K638_Ks.txt", "allObj_K700_Ks.txt", "allObj_K961_Ks.txt", "allObj_K973_Ks.txt", "allObj_K979_Ks.txt", "allObj_K1054_Ks.txt", "allObj_K1316_Ks.txt", "allObj_K1537_Ks.txt", "allObj_TRES-1_Ks.txt", "allObj_WASP1B_Ks.txt",  "allObj_WASP2b_Ks.txt", "allObj_WASP33B_Ks.txt",  "allObj_XO3B_Ks.txt", "allObj_XO-4B_Ks.txt"]
 
-allProperNames = ["Corot-1b","CQTau","DGTau","HAT-P-6b","HAT-P-17b","HAT-P-25b","HAT-P-30b","HAT-P-32b", "HAT-P-33b", "HD17156b", "IQAur", "K00174", "K00341", "K00555","K00638", "K00700", "K00961", "K00973", "K00979", "K01054", "K01316", "K01537", "TrES-1b", "WASP-1b", "WASP-2b", "WASP-33b","XO-3b", "XO-4b"]
+######################## Pick objects ###################
 
-allObjList = ["allObj_ABAUR_Ks.txt","allObj_CQTAU_FeII1.64_night2.txt","allObj_DGTAU_BrG2.16.txt", "allObj_DGTAU_FeII1.64_night2.txt", "allObj_DGTAU_H22.12.txt", "allObj_RWAUR_FeII1.64_night2.txt","allObj_RYTAU_FeII1.64_night2.txt", "allObj_RYTAU_H22.12.txt", "allObj_RYTAU_J.txt", "allObj_RYTAU_Ks.txt", "allObj_TTAU_H22.12.txt", "allObj_TTAU_Ks.txt"]
-allProperNames =["ABAur","CQTau","DGTau","DGTau", "DGTau", "RWAur", "RYTau", "RYTau", "RYTau", "RYTau", "TTau", "TTau"]
+### List everything with an allObj file in the data directory
+objectDirListing=os.listdir(nightPath)
 
-useObjList = ["allObj_K961_Ks.txt", "allObj_K973_Ks.txt", "allObj_K979_Ks.txt"]
-properName = [ "K00961", "K00973", "K00979"]
-#useObjList = allObjList
-#properName = allProperNames
-## Varuna needs special handling (too few frames)
-#useObjList = ["allObj_VARUNAOCC_Ks.txt"]
-#properName = ["VarunaOcc"]
+allObjList = []
+allProperNames = []
+nn=0
+print "\nThe following object lists are available:"
+for xx in objectDirListing:
+	if xx.startswith("allObj") & xx.endswith(".txt"): 	
+		allObjList.append(xx)
+		elems = xx.split("_")
+		name = aries.getProperName(elems[1])
+		filt = elems[2]
+		allProperNames.append(name)
+		print nn, name, filt
+		nn = nn + 1
+		
+### Now pick which to use
+print "\n Which objects and filters should be run?"
+print "1 -- ALL"
+print "2 -- Kepler objects (K*) ONLY, excluding things named NEAR or FIELD"
+print "3 -- Non-Kepler objects (not K*) ONLY"
+print "4 -- Use subset listed in script (copy and paste into step5-objects.py and rerun)"
+entry = raw_input("Choice (defaults to 1): ")
 
+useObjList=[]
+if entry == "2":
+	for nn,obj in enumerate(allProperNames):
+		if ((obj[0]=="K") & (obj.endswith("FIELD")==False) & (obj.endswith("NEAR")==False)):
+			useObjList.append(allObjList[nn])
+elif entry == "3":
+	for nn,obj in enumerate(allProperNames):
+		if ((obj[0]!="K") & (obj.endswith("FIELD")==False) & (obj.endswith("NEAR")==False)):
+			useObjList.append(allObjList[nn])
+elif entry == "4":
+	#### Enter your list here
+	useObjList = ["allObj_K961_Ks.txt", "allObj_K973_Ks.txt", "allObj_K979_Ks.txt"]
 
-## Now change to that directory
+else:
+	useObjList = allObjList
+	
+print "Using object lists:",useObjList,"\n"
+
+g = open("usingObjLists.txt","w")
+for obj in useObjList:
+	print >>g,obj
+g.close()
+
+### Also get the proper names
+properName=[]
+for ll in allObjList:
+	properName.append(aries.getProperNameForAllObjFile(ll))
+	
+## Now change to the night directory
 os.chdir(nightPath)
+## List all files in that directory
+allFiles = os.listdir(nightPath)
 
 ## Copy a fresh bad pixel map 
 ## Note: we are ignoring bad pixel maps for now
@@ -56,12 +117,12 @@ if makeNewBPM == True:
 	os.system("cp "+ao.pipelineReductionDir+"blankBPM1.fits ./BPM1.fits")
 
 
-#### Hack: have to do this by hand for now
+#### You will probably want to adjust these
 cr=['\n']
 
-useFWHM = 8.
-useBkg = 10.
-useThresh = 150.
+useFWHM = 8.      ## fwhm in pixels of images (5-50+ if the seeing/correction really sucks)
+useBkg = 10.      ## variance in background in counts (usually 1-10)
+useThresh = 150.  ## sigma above background required to detect a star (10-200 depending)
 
 
 ### .cl file that will contain all objects that need xmosaic
@@ -69,10 +130,7 @@ irafScriptFile = "runObjects.cl"
 outIRAF = open(irafScriptFile,"w")
 
 
-
-## List all files in that directory
-allFiles = os.listdir(nightPath)
-darkExptimes=[]
+### Run through all object list to set them up to be combined into one image with xmosaic's maskpass
 for nn,ff in enumerate(useObjList):
 	elems=ff.split("_")
 	night = elems[0]
@@ -89,7 +147,7 @@ for nn,ff in enumerate(useObjList):
 		useBPM = aries.doBadPixelCorr["default"]
 
 	print "\n Now working on",ff, "using FWHM type",useFwhm
-	allFiles = aries.readFileList(ff)
+	allFiles = gb.readListFile(ff)
 	## Now get centers, fwhm of brightest object (usually the target)
 	shiftListCoords={}
 	for frame in allFiles:
@@ -115,7 +173,7 @@ for nn,ff in enumerate(useObjList):
 		print frame+" Measured: X, Y (daophot); X, Y, FWHM (imexam)", worked[1] ,worked[2], measX, measY, measFWHM
 		if (2 < measFWHM < 50):
 			useFWHM = measFWHM		
-		#### NOTE: This is where we COULD implement lucky imaging
+		#### NOTE: a seeing criteria is used in step6
 		
 		#shiftListCoords[frame]=[worked[1],worked[2],measFWHM]
 		shiftListCoords[frame]=[measX, measY, measFWHM]
@@ -145,7 +203,7 @@ for nn,ff in enumerate(useObjList):
 	ext2=properName[nn]+"_"+filt
 	# mp_nsigobjms=6. mp_ngrow=1 are set high and low resp. to avoid big white blobs
 	# defaults were mp_nsigobjms=1.1 and mp_ngrow=3
-	# ALSO: don't update the BPM even if you use it! This leads to badness
+	# ALSO: never UPDATE the BPM (mp_badpixupdate=no), even if you use it! This leads to badness	
 	irafCommand = "xmos inlist=\"@"+allObjFile+"//.red\" reference=\""+refFrame+"\" output=\""+ext2+"\" expmap=\".exp\" shiftlist=\""+shiftListFile+"\"  fp_xslm=no fp_maskfix=no fp_xzap=no fp_badpixupdate=no fp_mkshifts=no fp_xnregistar=yes mp_mkmask=yes mp_maskdereg=yes mp_xslm=yes mp_maskfix=yes mp_xzap="+useBPM+" mp_badpixupdate=no mp_xnregistar=yes nmean=11 mp_nsigobjms=6. mp_ngrow=1\n\n"
 	
 	### Dump it in the .cl file
@@ -155,7 +213,7 @@ outIRAF.close()
 
 print "An iraf script called runObjects.cl has been created."
 print "It will run xmosaic once for each object and filter, as set in this script."
-print "  To invoke from within iraf, in the data directory type:"
+print "  To invoke from within iraf, go to the data directory and type:"
 print "  (A) xdimsum    [if package is not already loaded]"
 print "  (B) cl < runObjects.cl"
 

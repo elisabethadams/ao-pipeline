@@ -8,37 +8,62 @@
 #    2. copy existing Shiftlist, allObj files to .orig
 #    3. make a new Shiftlist and allObj files
 
-import os
-import string
-from pyraf import iraf
+################# BEGIN PREAMBLE ###########################
 
-## local packages
+import os
+import sys
+import string
+
+## User packages
+pipelineDir = os.path.dirname(os.path.realpath(__file__))
+print "This script is stored at:",pipelineDir
+moduleDir = string.replace(pipelineDir,"pipeline-reduction","modules")
+print "Adding modules from:",moduleDir
+sys.path.append(moduleDir) 
+import ao
 import aries
 import grabBag as gb
 
+### Read in which objects to use
+if os.path.exists("usingDate.txt"):
+	data = open("usingDate.txt","r")
+	useDates = []
+	lines = data.readlines()
+	for line in lines:
+		useDates.append(line.rstrip())
+	# Only use the first one
+	useNight = useDates[0]
+else:
+	sys.exit("I don't know what date to analyze. Please run step0-setup.py")
 
-### Pick which night to use
-useNight = "20111008"
 nightPath = ao.dataDir + useNight + "/"
 base = aries.targetBaseName[useNight]
+print "Night path:",nightPath, " file name base:", base
+################### END PREAMBLE ############################
+
 allNights = aries.framesForNights.keys()
 nightlyFilterDict={}
 for nn in allNights:
 	nightlyFilterDict[nn]=[]
 
-### Pick an object (next: read it in from command line)
-allObjList = ["allObj_CQTAU_Ks.txt", "allObj_DGTAU_Ks.txt","allObj_HATP6B_Ks.txt", "allObj_HATP30B_Ks.txt", "allObj_HATP32B_Ks.txt", "allObj_HD17156B_Ks.txt", "allObj_IQAUR_Ks.txt", "allObj_K174_Ks.txt", "allObj_K341_Ks.txt", "allObj_K555_Ks.txt", "allObj_K700_Ks.txt", "allObj_K961_Ks.txt", "allObj_K973_Ks.txt", "allObj_K979_Ks.txt", "allObj_TRES-1_Ks.txt","allObj_WASP33B_Ks.txt"]
 
-allProperNames = ["CQTau","DGTau","HAT-P-6b","HAT-P-30b","HAT-P-32b","HD17156b", "IQAur", "K00174","K00341","K00555","K00700","K00961","K00973","K00979", "TrES-1b","WASP-33b"]
+##### Read in the object(s) used in step5
+if os.path.exists("usingObjLists.txt"):
+	data = open("usingObjLists.txt","r")
+	useObjList = []
+	properName = []
+	lines = data.readlines()
+	for line in lines:
+		objList = line.rstrip()
+		useObjList.append(objList)
+		properName.append(aries.getProperNameForAllObjFile(objList))
+	print "Using object lists:",useObjList
+else:
+	sys.exit("I don't know what objects to analyze. Please run step5-objects.py")
 
 
-useObjList = ["allObj_K00961_Ks_use.txt", "allObj_K00973_Ks_use.txt", "allObj_K00979_Ks_use.txt"]
-properName = [ "K00961", "K00973", "K00979"]
-## Varuna needs special handling (too few frames)
-#useObjList = ["allObj_VARUNAOCC_Ks.txt"]
-#properName = ["VarunaOcc"]
-
-### How much is too big for the FWHM?
+######################## Individual settings for objects for this script ########################
+### How much is too big for the FWHM (in pixels)?
 rejectFWHMover={}
 rejectFWHMover["WASP-1b","Ks"] = 15.
 rejectFWHMover["WASP-2b","Ks"] = 25. ## TERRIBLE image quality, both stars elongated
@@ -65,7 +90,7 @@ rejectFWHMover["TrES-1b","Ks"] = 10.
 rejectFWHMover["TTau","H22.12"] = 7. 
 rejectFWHMover["TTau","Ks"] = 6. 
 
-## Now change to that directory
+## Now change to the night directory
 os.chdir(nightPath)
 
 ## Read in Shiftlist
@@ -103,4 +128,4 @@ for nn,ff in enumerate(useObjList):
 	data.close()
 	g.close()
 	gAll.close()
-	print ff, reject, "threshhold means ditching",rejected,"of",len(lines),"frames"
+	print ff, reject, "px FWHM threshhold means ditching",rejected,"of",len(lines),"frames"

@@ -419,16 +419,15 @@ def readFullCooAllStars(frame,myFWHM, myBkg, myThresh, numXpixels=1024, numYpixe
 		print "Entered: "+entry+" Using:",myThresh
 		return myFWHM, myBkg, myThresh
 	else:
-		print frame
-		print " found the following stars ("+str(len(coords))+"): "
+		print frame +" found the following "+str(len(coords))+" star(s):\n"
 		if interactive: ### your first time through, this should definitely be true!
 			for nn,coord in enumerate(coords):
-				print nn, coord
-			print "Your options (enter number):"
-			print "[enter] -- accept ALL stars"
-			print "r -- redo (prompt for new fwhm, threshhold, bkg sigma)"
-			print "2 1 4 -- pick SOME targets (list target FIRST, separate with spaces)"
-			print "anything else: accept ALL stars"
+				print " ",nn, coord
+			print "\n-----  Your options: --------------------------------------------------------"
+			print "        [enter] -- accept ALL stars"
+			print "              r -- redo (prompt for new fwhm, threshhold, bkg sigma)"
+			print "          2 1 4 -- pick SOME targets (list target FIRST, separate with spaces)"
+			print "  anything else -- accept ALL stars"
 			entry = raw_input("Your choice: ")
 			print "xxx",entry,"xxx"
 			if entry == "r":

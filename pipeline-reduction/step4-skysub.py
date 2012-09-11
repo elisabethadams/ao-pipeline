@@ -65,7 +65,7 @@ if makeNewBPM == True:
 ### Create .cl file that will contain all objects that need xmosaic
 print "An iraf script called skysub.cl has been created."
 print "It will run xmosaic once for each filter (and night)."
-print "  To invoke from within iraf, in the data directory type:"
+print "  To invoke from within iraf, go to the night data directory and type:"
 print "  (A) xdimsum    [if package is not already loaded]"
 print "  (B) cl < skysub.cl"
 irafScriptFile = "skysub.cl"
@@ -83,12 +83,9 @@ for ff in allFiles:
 		elems=ff.split("_")
 		night = elems[0]
 		filt = string.replace(elems[1],".txt","")
-		allFiles = aries.readFileList(ff)
+		allFiles = gb.readListFile(ff)
 		## Now sky subtract (1st pass)
-		#iraf.xdimsum()
-		#print "Running xmosaic 1st pass on", night, filt
 		refFrame=allFiles[1]
-		#print "Reference frame:",refFrame
 		ext1="try1"
 		shiftListFile="NA"
 		print >>outIRAF, " xmos inlist=\"@"+ff+"//.red\" reference=\""+refFrame+"\" output=\""+ext1+"\" shiftlist=\"NA\" expmap=\".exp\" nmean=11 \n"

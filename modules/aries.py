@@ -4,7 +4,10 @@
 #    Generic AO-related and project functions belong in ao.py
 
 ## Modules required by this package
+import string
+
 import ao
+import grabBag as gb
  
 ####### Which objects were observed on which nights? ###########
 objectsForNight={}
@@ -15,21 +18,40 @@ objectsForNight["20100925"] = ["K00013", "K00076", "K00082", "K00085", "K00257",
 objectsForNight["20111008"] = ["ABAur", "Corot-1b", "CQTau", "DGTau", "HAT-P-17b", "HAT-P-25b", "HAT-P-30b", "HAT-P-32b", "HAT-P-33b", "HAT-P-6b", "HAT-P-9b", "HD17156b", "IQAur", "K00174", "K00341","K00555", "K00638", "K00700", "K00961", "K00973", "K00979", "K01054", "K01316", "K01537", "K01883", "RWAur", "RYTau", "TrES-1b", "TTau", "WASP-1b", "WASP-2b", "WASP-33b", "XO-3b", "XO-4b"]
 
 ######## What are the "proper" object names?
-allProperNamesKs = ["ABAur", "CQTau", "Corot-1b", "DGTau", "HAT-P-17b", "HAT-P-25b", "HAT-P-30b", "HAT-P-32b", "HAT-P-33b", "HAT-P-6b", "HAT-P-9b", "HD17156b", "IQAur", "K00174", "K00341", "K00555", "K00638", "K00700", "K00961", "K00973", "K00979", "K01054", "K01316", "K01537", "K01883", "RWAur", "RYTau", "TTau", "TrES-1b", "WASP-1b", "WASP-2b", "WASP-33b", "XO-3b", "XO-4b"]
-allProperNamesJ = ["RYTau"]
-allProperNamesFe = ["CQTau", "DGTau", "RWAur",  "RYTau"]
-allProperNamesH2 = ["DGTau", "RWAur", "RYTau", "TTau"]
-allProperNamesBr = ["DGTau"]
+def getProperName(obj):
+	cleansed = gb.cleanse(obj,toUpper=True)
+	if cleansed.endswith("AUR"):
+		useObj = string.replace(cleansed,"AUR","Aur")
+	elif cleansed.endswith("TAU"):
+		useObj = string.replace(cleansed,"TAU","Tau")
+	elif cleansed.startswith("KOI"):
+		useObj = "K"+gb.strPad(cleansed[3:],False,5,padChar="0",padSide="left")
+	elif cleansed.startswith("K"): ### We assume these are all KOIs
+		useObj = "K"+gb.strPad(cleansed[1:],False,5,padChar="0",padSide="left")
+	elif cleansed.startswith("HATP"):
+		useObj = "HAT-P-"+cleansed[4:len(cleansed)-1]+string.lower(cleansed[-1])
+	elif cleansed.startswith("COROT"):
+		useObj = "CoRoT-"+cleansed[5:len(cleansed)-1]+string.lower(cleansed[-1])
+	elif cleansed.startswith("TRES"):
+		useObj = "TrES-"+cleansed[4:len(cleansed)-1]+string.lower(cleansed[-1])
+	elif cleansed.startswith("WASP"):
+		useObj = "WASP-"+cleansed[4:len(cleansed)-1]+string.lower(cleansed[-1])
+	elif cleansed.startswith("XO"):
+		useObj = "XO-"+cleansed[2:len(cleansed)-1]+string.lower(cleansed[-1])
+	elif cleansed.startswith("HD"):
+		useObj = cleansed[:len(cleansed)-1]+string.lower(cleansed[-1])
+	else:
+		useObj = obj
+	finalPass = string.replace(useObj,"--","-")
+	return finalPass
 
-#def getProperName(obj):#
-#	for nn,oo in enumerate(useObjList):
-#		prefix, obj1, filt, suffix = string.replace(ff,".","_").split("_")
-#		if obj1 == obj:
-#			return properName[nn]
-#		else:
-#			print "no match", obj1, obj
-
-
+def getProperNameForAllObjFile(allObjFile):
+	elems = allObjFile.split("_")
+	return getProperName(elems[1])
+	
+def getFiltForAllObjFile(allObjFile):
+	elems = allObjFile.split("_")
+	return getProperName(elems[2])
 
 ######## How were the data files named (the prefix used originally, NOT including the "q")?
 targetBaseName={}
@@ -56,7 +78,7 @@ framesForNights["night2"]=[574,1284]
 framesForNights["night3"]=[1305,2095]
 
 framesForNights["20091108"]=[1305,2095]
-framesForNights["20100503"]=[1305,2095]
+framesForNights["20100503"]=[433,448]
 framesForNights["20100923"]=[1305,2095]
 framesForNights["20100925"]=[1305,2095]
 
