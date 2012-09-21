@@ -70,34 +70,45 @@ os.chdir(nightPath)
 ## Copy all files to objects/OBJECT/FILTER/
 g = open("summary_"+useNight+".txt","w")
 for nn,ff in enumerate(useObjList):
-	prefix, obj, filt, suffix = ff.split("_")
-	objDir = aries.mainObjectPath+obj+"/"
-	objFilterDir = objDir+filt[0]+"/"
+	elems = ff.split("_")
+	prefix = elems[0]
+	obj = elems[1]
+	filt = elems[2].split(".")[0]  ### gets rid of the trailing .txt
+	print "\nCopying files for",obj, filt,"\n"
+	objDir = ao.koiDir(obj,instr="ARIES")
+	objFilterDir = ao.koiFilterDir(obj,filt,instr="ARIES")
+	savedDir = objFilterDir+"saved/"
+	print "Making archive directories if they don't already exist"
 	if os.path.exists(objDir) == False:
 		os.mkdir(objDir)
 	if os.path.exists(objFilterDir) == False:
 		os.mkdir(objFilterDir)
-	if os.path.exists(objFilterDir+"saved/") == False:
-		os.mkdir(objFilterDir+"saved/")
+	if os.path.exists(savedDir) == False:
+		os.mkdir(savedDir)
 	
-	## The intermediate steps get saved to a subdirectory
-	os.system("cp "+obj+"_"+filt+"* "+objFilterDir+"saved/")
 	## The shiftlist, object list, and final image are saved in the main folder
+	print "Copying shiftfile"
 	os.system("cp Shiftlist_"+obj+"_"+filt+".txt "+objFilterDir)
-	os.system("cp "+ff+" "+objFilterDir+"allObj_"+obj+"_"+filt+".txt")
+	print "Copying list of frames"
+	os.system("cp "+ff+" "+objFilterDir+ff)
+	print "Copying final image"
 	os.system("cp "+obj+"_"+filt+"_mp.fits "+objFilterDir+obj+"_"+filt+".fits")
+	## The intermediate steps get saved to a subdirectory
+	print "Copying saved info..."
+	os.system("cp "+obj+"_"+filt+"* "+savedDir)
 
 	## Also we should print the FWHM for our target in the combined image
 	finalFrame = obj+"_"+filt+"_mp.fits"
 	os.system("rm -f "+finalFrame+".fullcoo")
 
+	print "Finding the FWHM for the final frame and exporting to a summary file"
 	ao.findStars(finalFrame, aries.useFWHM, aries.useBkg ,aries.useThresh, extra="")
-	worked = aries.readFullCoo(finalFrame, aries.useFWHM, aries.useBkg, aries.useThresh)
+	worked = ao.readFullCooAllStars(finalFrame, aries.useFWHM, aries.useBkg, aries.useThresh, interactive=True)
 	while worked[0] != True:
-		useFWHM,useBkg,useThresh = worked
+		useFWHM,useBkg,useThresh, useX, useY, useEdge = worked
 		os.system("rm -f "+finalFrame+".fullcoo")
-		ao.findStars(finalFrame,useFWHM,useBkg,useThresh,extra="")
-		worked = aries.readFullCoo(finalFrame,useFWHM,useBkg,useThresh)
+		ao.findStars(finalFrame, useFWHM, useBkg, useThresh,extra="")
+		worked = ao.readFullCooAllStars(finalFrame, useFWHM, useBkg, useThresh, numXpixels=useX, numYpixels=useY, ignoreEdgePixels=useEdge, interactive=True)
 
 
 	measFWHM, measX, measY = ao.getFWHM(finalFrame, finalFrame+".coo", fwhmType=aries.useFWHM)

@@ -15,18 +15,21 @@ args = sys.argv
 
 filename = args[1]
 
-if len(args) >= 3:
-   suffix = args[2]
+print args, len(args)
 
-print(suffix)
+if len(args) >= 3:
+	suffix = "."+args[2]+".fits"
+else:
+	suffix = ".fits"
+print suffix
 
 datafile = open(filename)
 
 lines = datafile.readlines()
 command = "ds9 -zscale -zoom 0.5"
 for line in lines:
-  modline=string.replace(line,".fits","."+suffix+".fits")
-  command = command +" " + modline.rstrip()
+	modline=string.replace(line,".fits",suffix)
+	command = command +" " + modline.rstrip()
 datafile.close()
 
 

@@ -200,11 +200,14 @@ for nn,ff in enumerate(useObjList):
 	gAll.close()
 
 	### Set up commands for iraf .cl script (for the second run, or mask pass, through xmosaic)
+	# Make sure the output files are predictably named
 	ext2=properName[nn]+"_"+filt
 	# mp_nsigobjms=6. mp_ngrow=1 are set high and low resp. to avoid big white blobs
 	# defaults were mp_nsigobjms=1.1 and mp_ngrow=3
 	# ALSO: never UPDATE the BPM (mp_badpixupdate=no), even if you use it! This leads to badness	
-	irafCommand = "xmos inlist=\"@"+allObjFile+"//.red\" reference=\""+refFrame+"\" output=\""+ext2+"\" expmap=\".exp\" shiftlist=\""+shiftListFile+"\"  fp_xslm=no fp_maskfix=no fp_xzap=no fp_badpixupdate=no fp_mkshifts=no fp_xnregistar=yes mp_mkmask=yes mp_maskdereg=yes mp_xslm=yes mp_maskfix=yes mp_xzap="+useBPM+" mp_badpixupdate=no mp_xnregistar=yes nmean=11 mp_nsigobjms=6. mp_ngrow=1\n\n"
+	##################### IMPORTANT IRAF COMMAND BELOW ##########################
+	irafCommand = "xmos inlist=\"@"+allObjFile+"//.red\" reference=\""+refFrame+"\" output=\""+ext2+"\" expmap=\".exp\" shiftlist=\""+shiftListFile+"\" bpmask=BPM1.fits fp_xslm=no fp_maskfix=no fp_xzap=yes fp_badpixupdate=yes fp_mkshifts=no fp_xnregistar=yes mp_mkmask=yes mp_maskdereg=yes mp_xslm=yes mp_maskfix=yes mp_xzap="+useBPM+" mp_badpixupdate=no mp_xnregistar=yes nmean=11 mp_nsigobjms=6. mp_ngrow=1\n\n"
+	########################### END IRAF COMMAND  ###############################
 	
 	### Dump it in the .cl file
 	print >>outIRAF, irafCommand
