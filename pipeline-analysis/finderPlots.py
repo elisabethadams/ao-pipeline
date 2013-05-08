@@ -10,6 +10,7 @@ import pylab
 import datetime
 import math
 import matplotlib.cm as cm
+import numpy as np
 from matplotlib.colors import LogNorm
 
 # User packages
@@ -27,15 +28,19 @@ def main():
 	args = sys.argv
 	koi = args[1]
 	filt = args[2]
-	k = koiPlusFilter.koiPlusFilter(koi,filt)
+	if len(args)>3:
+		instrUsed = args[3]
+	else:
+		instrUsed = "ARIES"
+	k = koiPlusFilter.koiPlusFilter(koi,filt,instrUsed)
 	makeFinderPlot(k)
 #	print ao.getDataDir(koi)
 
 ### Settings
-## What color scheme
-#colorScheme = cm.jet
-colorScheme = cm.hot
-
+## What color scheme to use (if this is stand-alone; step6-plots sets its own choice!)
+#colorScheme = cm.jet    # blues
+colorScheme = cm.hot    # white-red on black
+#colorScheme = cm.gray    # grayscale
 
 ##### Plotting subfunctions
 # Add arrows
@@ -51,8 +56,8 @@ def addArrows(k,arrowDeltaX,arrowDeltaY,direction,arrowScale=False):
 	deltaX1 =arrowDeltaX*arrowScale
 	deltaY1 =arrowDeltaY*arrowScale
 	
-	labelX1 = k.zoomedBoxHalfSize+k.arrowOffsetX+arrowDeltaX*arrowScale*k.labelLengthScale - 15*k.lengthScale
-	labelY1 = k.zoomedBoxHalfSize+k.arrowOffsetY+arrowDeltaY*arrowScale*k.labelLengthScale - 15*k.lengthScale
+	labelX1 = k.zoomedBoxHalfSize+k.arrowOffsetX+arrowDeltaX*arrowScale*k.labelLengthScale - 10*k.lengthScale
+	labelY1 = k.zoomedBoxHalfSize+k.arrowOffsetY+arrowDeltaY*arrowScale*k.labelLengthScale - 10*k.lengthScale
 	
 #	print "arrowScale", arrowScale, "origin", originX1+k.extraX, originY1+k.extraY, "delta", deltaX1, deltaY1
 		
@@ -69,9 +74,9 @@ def fullSizeSubPlot(k,nrows,ncols,plotNum,scaleMin=0,scaleMax=100,showColorBar=T
 	# Show box
 	pylab.plot([k.lowerX,k.lowerX,k.upperX,k.upperX,k.lowerX],[k.lowerY,k.upperY,k.upperY,k.lowerY,k.lowerY],"w--",markersize=10)
 	# Show and label scale bar
-	scaleOffset=k.zoomedBoxHalfSize/4
+	scaleOffset=k.zoomedBoxHalfSize/3
 	pylab.plot([k.lowerX,k.upperX],[k.upperY+scaleOffset,k.upperY+scaleOffset],"w-",markersize=10)
-	pylab.text((k.lowerX+k.upperX)/2,k.upperY+scaleOffset,str(k.zoomedBoxHalfSizeArcsec)+"\"",color="white")
+	pylab.text((k.lowerX+k.upperX)/2,k.upperY+scaleOffset+5,str(2*k.zoomedBoxHalfSizeArcsec)+"\"",color="white")
 	if showColorBar:
 		pylab.colorbar(shrink=0.85)
 	if showArrows:
@@ -84,7 +89,7 @@ def fullSizeSubPlot(k,nrows,ncols,plotNum,scaleMin=0,scaleMax=100,showColorBar=T
 	pylab.title(k.koi+" "+k.filt+" ("+str(round(k.numXarcsec,1))+"\"x"+str(round(k.numYarcsec,1))+"\")")
 
 
-def zoomedInSubPlot(k,nrows,ncols,plotNum,scale="log",useColorMap=colorScheme):
+def zoomedInSubPlot(k,nrows,ncols,plotNum,scale="log",useColorMap=colorScheme, plotContours=False, plotLowerScalebar=False,scalebarLabel=""):
 #	print "we are subplotting: ",nrows, ncols, plotNum
 	zoomedPlot=pylab.subplot(nrows,ncols,plotNum)
 	if (k.scalingLaw == "linear") | (scale=="linear"):
@@ -93,12 +98,22 @@ def zoomedInSubPlot(k,nrows,ncols,plotNum,scale="log",useColorMap=colorScheme):
 	else:
 		print k.koi, "log scale"
 		zz=pylab.imshow(k.scidataZoomed,cmap=useColorMap,vmin=k.scaleMin,vmax=k.scaleMax,norm=LogNorm())
+	if plotContours:
+		locontours = np.logspace(np.log10(3*k.scaleMin),np.log10(6*k.scaleMin),num=6)
+		hicontours = np.logspace(np.log10(6*k.scaleMin),np.log10(k.scaleMax),num=6)
+		blah = pylab.contour(k.scidataZoomed,colors='k',levels=np.concatenate((locontours,hicontours)))
 	## Code for colorbar if you want one
 	#	pylab.colorbar(zz,cax=zoomedPlot)
 	#	pylab.colorbar.make_axes(pylab.gca(), shrink=0.5)
 	# Show orientation on smaller plot, along with scale
 	addArrows(k,k.arrowDeltaX12, k.arrowDeltaY12,k.dir12)
 	addArrows(k,k.arrowDeltaX10, k.arrowDeltaY10,k.dir10)
+	
+	# How about adding a scale bar underneath stuff if we don't want to give it its own box in the grid?
+	if plotLowerScalebar == True:
+	#	pylab.plot([0,-25],[2*k.zoomedBoxHalfSize,-25],color="k",linewidth=2.0)
+		pylab.text(k.zoomedBoxHalfSize,-20, scalebarLabel, color="k", fontsize=18, horizontalalignment='center')	
+	
 		
 	pylab.xlim(xmin=0,xmax=2*k.zoomedBoxHalfSize)
 	pylab.ylim(ymin=0,ymax=2*k.zoomedBoxHalfSize)

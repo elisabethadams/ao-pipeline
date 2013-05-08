@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Step 5 of AO compilation pipeline: find detection limits
+# Step 8 of AO compilation pipeline: find detection limits
 #     Prereqs:
 #       0. run step4-getmag.py (makes OBJECT_Filt.fits.mag, assumed to exist)
 #     This script will:
@@ -108,7 +108,7 @@ else:
 
 ### Figure out which koi have J and or K data
 koiDict = {}
-for filt in ["J","Ks"]:
+for filt in filters:
 	koiDict[filt]=[]
 	for obj in useObjects:
 		if os.path.isfile(ao.koiFilterDir(obj,filt) + ao.finalKOIimageFile(obj,filt)):
@@ -121,13 +121,13 @@ print koiDict["Ks"]
 
 # we will need to rename: Ia means imaging-AO
 def getBatchName(koi,filt,suffix):
-	return koi+"Ia-ea"+aries.objectsForNight[koi]+filt+suffix
+	return koi+"Ia-ea"+settings[koi]["Night"]+filt+suffix
 
 # Open text file to go with each file in the tar file
 g = open(batchDir+tarFileContentsName,'w')
 
 ## Now copy
-for filt in ao.filters:
+for filt in filters:
 	for koi in koiDict[filt]:
 		if (koi in useObjects) & (copyDataFiles == True):
 			print koi,filt, "ref frame=",settings[koi]["RefFrame_"+filt]
@@ -152,7 +152,7 @@ for filt in ao.filters:
 ## Get more details for long summary:
 initSigma=5.
 longtext={}
-for filt in ao.filters:
+for filt in filters:
 	for koi in koiDict[filt]:
 		longtext[koi,filt] =""
 		if (koi in useObjects) & (makeObservingSummary == True):

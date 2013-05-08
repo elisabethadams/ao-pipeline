@@ -27,6 +27,22 @@ import ao
 import grabBag as gb
 import kepler
 
+##### Read in alternate instrument directory (if not "ARIES")
+args = sys.argv
+if len(args)>1:
+	instrUsed = str(args[1])
+else:
+	instrUsed = "ARIES"
+objectDataDir = ao.objDirByInstr(instrUsed)
+print "\nLooking for objects in directory: \n "+objectDataDir+"\n"
+
+### Set the optimal size, in pixels, of the sky-subtraction annulus
+if instrUsed == "Speckle":
+	bestSkyForInst = '50'
+else:
+	bestSkyForInst = '100'
+
+
 ### Read in which objects to use
 if os.path.exists("usingObjects.txt"):
 	data = open("usingObjects.txt","r")
@@ -36,7 +52,7 @@ if os.path.exists("usingObjects.txt"):
 		useObjects.append(line.rstrip())
 else:
 	print "The file does not exist. Running all objects..."
-	objectDirListing=os.listdir(ao.objectsDir)
+	objectDirListing=os.listdir(objectDataDir)
 	useObjects = []
 	for obj in objectDirListing:
 		useObjects.append(obj)
@@ -56,7 +72,7 @@ for ff in filters:
 	useList[ff]=[]
 for obj in useObjects:
 	for filt in filters:
-		imageDir = ao.koiFilterDir(obj,filt)
+		imageDir = ao.koiFilterDir(obj,filt,instrUsed)
 		image = imageDir + ao.finalKOIimageFile(obj,filt)
 		## Make sure the image exists
 		if os.path.isfile(image):
@@ -72,5 +88,5 @@ for obj in useObjects:
 				print ".mag file already exists for",obj
 			else:
 				print "Running",image
-				ao.createMagFile(imageDir, image, image+".coo", image+".mag", fullyAutomatic=True, aperturesString='2,5,10', bestSkyAperture='100')	
+				ao.createMagFile(imageDir, image, image+".coo", image+".mag", fullyAutomatic=True, aperturesString='2,5,10', bestSkyAperture=bestSkyForInst)	
 

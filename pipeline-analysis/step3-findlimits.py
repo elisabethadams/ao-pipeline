@@ -31,6 +31,15 @@ import ao
 import grabBag as gb
 import kepler
 
+##### Read in alternate instrument directory (if not "ARIES")
+args = sys.argv
+if len(args)>1:
+	instrUsed = str(args[1])
+else:
+	instrUsed = "ARIES"
+objectDataDir = ao.objDirByInstr(instrUsed)
+print "\nLooking for objects in directory: \n "+objectDataDir+"\n"
+
 ### Read in which objects to use
 if os.path.exists("usingObjects.txt"):
 	data = open("usingObjects.txt","r")
@@ -40,7 +49,7 @@ if os.path.exists("usingObjects.txt"):
 		useObjects.append(line.rstrip())
 else:
 	print "The file does not exist. Running all objects..."
-	objectDirListing=os.listdir(ao.objectsDir)
+	objectDirListing=os.listdir(objectDataDir)
 	useObjects = []
 	for obj in objectDirListing:
 		useObjects.append(obj)
@@ -53,24 +62,18 @@ print "Searching for filters:",filters
 settings={}
 for obj in useObjects:
 	settings[obj]={}
-	settings[obj]=ao.readSettingsFile(ao.settingsFile(obj))
+	settings[obj]=ao.readSettingsFile(ao.settingsFile(obj,instrUsed))
 
 ################### END PREAMBLE ############################
-
-############# HACK #############
-#useObjects=["HAT-P-30b"]
-################################
-
-useList={}
-for ff in filters:
-	useList[ff]=[]
 for obj in useObjects:
 	for filt in filters:
-		image = ao.koiFilterDir(obj,filt)+ao.finalKOIimageFile(obj,filt)
-		print "Does image exist?",image
+		image = ao.koiFilterDir(obj,filt,instrUsed)+ao.finalKOIimageFile(obj,filt)
+	#	print "Does image exist?",image
 		if os.path.isfile(image):
-			useList[filt].append(obj)
-			os.system("./magLimits.py "+obj+" "+filt)
+			#if os.path.isfile(ao.limMagFile(obj,filt,instrUsed)):
+			#	print "Limit file exists:",ao.limMagFile(obj,filt,instrUsed)
+			#else:
+				os.system("./magLimits.py "+obj+" "+filt+" "+instrUsed)
 		else:
 			print "No such file:", obj, filt
 

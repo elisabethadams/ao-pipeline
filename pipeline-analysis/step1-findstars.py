@@ -26,6 +26,16 @@ import ao
 import grabBag as gb
 import kepler
 
+##### Read in alternate instrument directory (if not "ARIES")
+args = sys.argv
+if len(args)>1:
+	instrUsed = str(args[1])
+else:
+	instrUsed = "ARIES"
+objectDataDir = ao.objDirByInstr(instrUsed)
+print "\nLooking for objects in directory: \n "+objectDataDir+"\n"
+
+
 ### Read in which objects to use
 if os.path.exists("usingObjects.txt"):
 	data = open("usingObjects.txt","r")
@@ -35,7 +45,7 @@ if os.path.exists("usingObjects.txt"):
 		useObjects.append(line.rstrip())
 else:
 	print "The file does not exist. Running all objects..."
-	objectDirListing=os.listdir(ao.objectsDir)
+	objectDirListing=os.listdir(objectDataDir)
 	useObjects = []
 	for obj in objectDirListing:
 		useObjects.append(obj)
@@ -53,14 +63,18 @@ overwrite=False
 ### Read in summary of target X, Y and FWHM from reduction pipeline
 summaryInfo={}
 for filt in filters:
-	summFile=ao.objectsDir+"summary_"+filt+".txt"
-#	print summFile
+	summFile=objectDataDir+"summary_"+filt+".txt"
+	print summFile,
 	if os.path.isfile(summFile):
+		print  " found!"
 		data = open(summFile,"r")
 		lines = data.readlines()
 		for line in lines:
 			elems=line.rstrip().split(" ")
 			summaryInfo[elems[0],filt] = [elems[1],elems[2],elems[3]] ## x, y, fwhm keyed to object, filter
+	else:
+		print  " NOT found!"
+	
 
 #print summaryInfo.keys()
 
@@ -77,10 +91,12 @@ useList={}
 for ff in filters:
 	useList[ff]=[]
 
+
 ### Now make .coo file for all objects, filters
 for obj in useObjects:
 	for filt in filters:
-		image = ao.koiFilterDir(obj,filt)+ao.finalKOIimageFile(obj,filt)
+		image = ao.koiFilterDir(obj,filt,instrUsed)+ao.finalKOIimageFile(obj,filt)
+		print "image?",image
 		if os.path.isfile(image):
 			useList[filt].append(obj)
 			## Find right fwhm, sigma to use

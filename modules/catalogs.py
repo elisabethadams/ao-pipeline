@@ -196,7 +196,7 @@ def outputVOtableFor2MASS(output2MASSfile,useDict="exoplanet.eu"):
 	out = open(output2MASSfile,"w")
 	print >>out, "|   object   |   ra          |   dec         |  major       |"
 	print >>out, "|   char     |   double      |  double       |  double      |"
-
+	
 	if useDict=="exoplanet.eu":
 		exoDict = readInExoplanetCatalog(catalogDir+"exoplanet.eu/exoplanet.eu_catalog_20120810.csv")
 		objects = exoDict["objects"]
@@ -219,3 +219,4 @@ def outputVOtableFor2MASS(output2MASSfile,useDict="exoplanet.eu"):
 			##### We assume the positions are good to within 2"
 			print >>out, obj+"         "+raDec+" "+decDec+" 2.0"
 	out.close()
+

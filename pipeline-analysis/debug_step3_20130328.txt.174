@@ -1,0 +1,566 @@
+/Users/era/Research/From_Ginshiro/AO/objects/ARIES/K00082/settings_K00082.tsv
+
+USING PLATE SCALE FOR ARIES : 0.02
+Read .mag file: numStars= 1  apertures:  ['1.00', '2.00', '3.00', '4.00', '5.00', '6.00']
+Annuli: [   1.25    3.75    6.25    8.75   12.5    17.5    22.5    27.5    32.5
+   37.5    42.5    47.5    75.    125.    175.    225.    275.    325.
+  375.    425.    475.  ] 
+
+digiphot/:
+ apphot/        daophot/        photcal/        ptools/
+apphot/:
+ aptest         findpars@       pconvert        polymark        psort
+ center         fitpsf          pdump           polypars@       qphot
+ centerpars@    fitsky          pexamine        polyphot        radprof
+ daofind        fitskypars@     phot            prenumber       wphot
+ datapars@      pcalc           photpars@       pselect
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (1.25) (CR or value): 	New inner radius of sky annulus: 1.25 scale units 1.25 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (3.75) (CR or value): 	New inner radius of sky annulus: 3.75 scale units 3.75 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (6.25) (CR or value): 	New inner radius of sky annulus: 6.25 scale units 6.25 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (8.75) (CR or value): 	New inner radius of sky annulus: 8.75 scale units 8.75 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (12.5) (CR or value): 	New inner radius of sky annulus: 12.5 scale units 12.5 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (17.5) (CR or value): 	New inner radius of sky annulus: 17.5 scale units 17.5 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (22.5) (CR or value): 	New inner radius of sky annulus: 22.5 scale units 22.5 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (27.5) (CR or value): 	New inner radius of sky annulus: 27.5 scale units 27.5 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (32.5) (CR or value): 	New inner radius of sky annulus: 32.5 scale units 32.5 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (37.5) (CR or value): 	New inner radius of sky annulus: 37.5 scale units 37.5 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (42.5) (CR or value): 	New inner radius of sky annulus: 42.5 scale units 42.5 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (47.5) (CR or value): 	New inner radius of sky annulus: 47.5 scale units 47.5 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (75.) (CR or value): 	New inner radius of sky annulus: 75. scale units 75. pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (125.) (CR or value): 	New inner radius of sky annulus: 125. scale units 125. pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (175.) (CR or value): 	New inner radius of sky annulus: 175. scale units 175. pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (225.) (CR or value): 	New inner radius of sky annulus: 225. scale units 225. pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (275.) (CR or value): 	New inner radius of sky annulus: 275. scale units 275. pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (325.) (CR or value): 	New inner radius of sky annulus: 325. scale units 325. pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (375.) (CR or value): 	New inner radius of sky annulus: 375. scale units 375. pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (425.) (CR or value): 	New inner radius of sky annulus: 425. scale units 425. pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (475.) (CR or value): 	New inner radius of sky annulus: 475. scale units 475. pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+J
+
+
+[   1.25    3.75    6.25    8.75   12.5    17.5    22.5    27.5    32.5
+   37.5    42.5    47.5    75.    125.    175.    225.    275.    325.
+  375.    425.    475.  ] {1.25: ['799.867', '350.952', '5878.32', '1386.171', '0.007', '0.007'], 3.7500000000000004: ['799.867', '350.952', '3268.25', '840.1274', '0.007', '0.007'], 37.5: ['799.867', '350.952', '18.95845', '4.280459', '0.007', '0.007'], 375.0: ['799.867', '350.952', '-0.5014656', '1.999809', '0.007', '0.007'], 325.0: ['799.867', '350.952', '-0.3913303', '2.102675', '0.007', '0.007'], 12.5: ['799.867', '350.952', '585.8959', '169.804', '0.007', '0.007'], 225.0: ['799.867', '350.952', '-0.2954629', '1.654276', '0.007', '0.007'], 8.75: ['799.867', '350.952', '1245.243', '376.0554', '0.007', '0.007'], 75.0: ['799.867', '350.952', '0.8418528', '1.873434', '0.007', '0.007'], 22.5: ['799.867', '350.952', '109.4505', '25.76689', '0.007', '0.007'], 425.0: ['799.867', '350.952', '-0.4603416', '1.688851', '0.007', '0.007'], 175.0: ['799.867', '350.952', '-0.6727995', '1.626407', '0.007', '0.007'], 42.5: ['799.867', '350.952', '12.47674', '3.14826', '0.007', '0.007'], 275.0: ['799.867', '350.952', '-0.346147', '1.714998', '0.007', '0.007'], 47.5: ['799.867', '350.952', '7.890687', '2.598899', '0.007', '0.007'], 32.499999999999993: ['799.867', '350.952', '30.93506', '6.749913', '0.007', '0.007'], 27.499999999999996: ['799.867', '350.952', '53.89833', '12.22218', '0.007', '0.007'], 6.25: ['799.867', '350.952', '2103.51', '553.4872', '0.007', '0.007'], 125.0: ['799.867', '350.952', '-0.84632', '1.752269', '0.007', '0.007'], 475.0: ['799.867', '350.952', '-0.5332199', '1.60332', '0.007', '0.007'], 17.5: ['799.867', '350.952', '244.6909', '60.51227', '0.007', '0.007']} 
+
+
+Outermost sky background: -0.5332199
+{'KOI': 'K00082', 'TargetPixelRange_Ks': '[[500, 1000], [100, 500]]', 'Plate_scale_Ks': '0.02085', '2MASS_Ks': "['9.351', '0.006']", 'RefFrame_Ks': 'qstar0454.fits', 'Plate_scale_J': '0.02085', 'FrameList_J': 'KOI82_J', 'FrameList_Ks': 'KOI82_Ks', 'Raw_data_dir': '/Users/era/Research/Projects/Kepler/AO/data/20100503/', 'RefFrame_J': 'qstar0470.fits', 'Night': '20100503', '2MASS_H': "['9.446', '0.016']", 'TargetPixelRange_J': '[[500, 1000], [100, 500]]', '2MASS_J': "['9.984', '0.020']"}
+K00082 J 9.984 11.6394389378
+/Users/era/Research/From_Ginshiro/AO/objects/ARIES/K00082/settings_K00082.tsv
+
+USING PLATE SCALE FOR ARIES : 0.02
+Read .mag file: numStars= 1  apertures:  ['1.00', '2.00', '3.00', '4.00', '5.00', '6.00']
+Annuli: [   1.25    3.75    6.25    8.75   12.5    17.5    22.5    27.5    32.5
+   37.5    42.5    47.5    75.    125.    175.    225.    275.    325.
+  375.    425.    475.  ] 
+
+digiphot/:
+ apphot/        daophot/        photcal/        ptools/
+apphot/:
+ aptest         findpars@       pconvert        polymark        psort
+ center         fitpsf          pdump           polypars@       qphot
+ centerpars@    fitsky          pexamine        polyphot        radprof
+ daofind        fitskypars@     phot            prenumber       wphot
+ datapars@      pcalc           photpars@       pselect
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (1.25) (CR or value): 	New inner radius of sky annulus: 1.25 scale units 1.25 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (3.75) (CR or value): 	New inner radius of sky annulus: 3.75 scale units 3.75 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (6.25) (CR or value): 	New inner radius of sky annulus: 6.25 scale units 6.25 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (8.75) (CR or value): 	New inner radius of sky annulus: 8.75 scale units 8.75 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (12.5) (CR or value): 	New inner radius of sky annulus: 12.5 scale units 12.5 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (17.5) (CR or value): 	New inner radius of sky annulus: 17.5 scale units 17.5 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (22.5) (CR or value): 	New inner radius of sky annulus: 22.5 scale units 22.5 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (27.5) (CR or value): 	New inner radius of sky annulus: 27.5 scale units 27.5 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (32.5) (CR or value): 	New inner radius of sky annulus: 32.5 scale units 32.5 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (37.5) (CR or value): 	New inner radius of sky annulus: 37.5 scale units 37.5 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (42.5) (CR or value): 	New inner radius of sky annulus: 42.5 scale units 42.5 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (47.5) (CR or value): 	New inner radius of sky annulus: 47.5 scale units 47.5 pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (75.) (CR or value): 	New inner radius of sky annulus: 75. scale units 75. pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (125.) (CR or value): 	New inner radius of sky annulus: 125. scale units 125. pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (175.) (CR or value): 	New inner radius of sky annulus: 175. scale units 175. pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (225.) (CR or value): 	New inner radius of sky annulus: 225. scale units 225. pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (275.) (CR or value): 	New inner radius of sky annulus: 275. scale units 275. pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (325.) (CR or value): 	New inner radius of sky annulus: 325. scale units 325. pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (375.) (CR or value): 	New inner radius of sky annulus: 375. scale units 375. pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (425.) (CR or value): 	New inner radius of sky annulus: 425. scale units 425. pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+File does not exist BEFORE running phot, so no need to delete.
+
+Centering algorithm (centroid) (CR or value): 	New centering algorithm: centroid
+Centering box width in scale units (5.) (CR or value): 	New centering box width: 5. scale units  5. pixels
+Sky fitting algorithm (centroid) (CR or value): 	Sky fitting algorithm: centroid
+Inner radius of sky annulus in scale units (475.) (CR or value): 	New inner radius of sky annulus: 475. scale units 475. pixels
+Width of the sky annulus in scale units (5.) (CR or value): 	New width of the sky annulus: 5. scale units 5. pixels
+File/list of aperture radii in scale units (1) (CR or value): 	Aperture radius 1: 1. scale units 1. pixels
+Standard deviation of background in counts (INDEF) (CR or value): 	New standard deviation of background: INDEF counts
+Minimum good data value (INDEF) (CR or value): 	New minimum good data value: INDEF counts
+Maximum good data value (INDEF) (CR or value): 	New maximum good data value: INDEF counts
+
+Ks
+
+
+[   1.25    3.75    6.25    8.75   12.5    17.5    22.5    27.5    32.5
+   37.5    42.5    47.5    75.    125.    175.    225.    275.    325.
+  375.    425.    475.  ] {1.25: ['798.572', '352.050', '5008.853', '1632.558', '0.004', '0.006'], 3.7500000000000004: ['798.572', '352.050', '2067.852', '876.821', '0.004', '0.006'], 37.5: ['798.572', '352.050', '13.65097', '3.786963', '0.004', '0.006'], 375.0: ['798.572', '352.050', '-0.20774', '2.168609', '0.004', '0.006'], 325.0: ['798.572', '352.050', '-0.08152989', '2.01035', '0.004', '0.006'], 12.5: ['798.572', '352.050', '405.4322', '98.35979', '0.004', '0.006'], 225.0: ['798.572', '352.050', '0.1988138', '1.465339', '0.004', '0.006'], 8.75: ['798.572', '352.050', '659.094', '162.5415', '0.004', '0.006'], 75.0: ['798.572', '352.050', '1.16186', '1.698122', '0.004', '0.006'], 22.5: ['798.572', '352.050', '71.0946', '16.96887', '0.004', '0.006'], 425.0: ['798.572', '352.050', '-0.281087', '1.775255', '0.004', '0.006'], 175.0: ['798.572', '352.050', '0.07858825', '1.503102', '0.004', '0.006'], 42.5: ['798.572', '352.050', '8.524608', '2.927836', '0.004', '0.006'], 275.0: ['798.572', '352.050', '0.003505785', '1.676938', '0.004', '0.006'], 47.5: ['798.572', '352.050', '5.569881', '2.274284', '0.004', '0.006'], 32.499999999999993: ['798.572', '352.050', '23.46621', '5.702339', '0.004', '0.006'], 27.499999999999996: ['798.572', '352.050', '39.74436', '8.48908', '0.004', '0.006'], 6.25: ['798.572', '352.050', '1032.845', '334.4148', '0.004', '0.006'], 125.0: ['798.572', '352.050', '-0.0409827', '1.555636', '0.004', '0.006'], 475.0: ['798.572', '352.050', '-0.300538', '1.721786', '0.004', '0.006'], 17.5: ['798.572', '352.050', '166.2903', '46.97971', '0.004', '0.006']} 
+
+
+Outermost sky background: -0.300538
+{'KOI': 'K00082', 'TargetPixelRange_Ks': '[[500, 1000], [100, 500]]', 'Plate_scale_Ks': '0.02085', '2MASS_Ks': "['9.351', '0.006']", 'RefFrame_Ks': 'qstar0454.fits', 'Plate_scale_J': '0.02085', 'FrameList_J': 'KOI82_J', 'FrameList_Ks': 'KOI82_Ks', 'Raw_data_dir': '/Users/era/Research/Projects/Kepler/AO/data/20100503/', 'RefFrame_J': 'qstar0470.fits', 'Night': '20100503', '2MASS_H': "['9.446', '0.016']", 'TargetPixelRange_J': '[[500, 1000], [100, 500]]', '2MASS_J': "['9.984', '0.020']"}
+K00082 Ks 9.351 11.3214061258
+
+Looking for objects in directory: 
+ /Users/era/Research/From_Ginshiro/AO/objects/ARIES/
+
+Using: ['K00082']
+Searching for filters: ['J', 'Ks', '692nm', '880nm']
+No such file: K00082 692nm
+No such file: K00082 880nm

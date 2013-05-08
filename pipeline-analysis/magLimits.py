@@ -36,17 +36,32 @@ import catalogs
 args = sys.argv
 obj = args[1]
 filt = args[2]
-
+if len(args)>3:
+	instrUsed = str(args[3])
+else:
+	instrUsed = "ARIES"
 
 ### Find the directory and file
-fitsDir = ao.koiFilterDir(obj,filt)
+fitsDir = ao.koiFilterDir(obj,filt,instrUsed)
 fitsFile = ao.finalKOIimageFile(obj,filt)
 
 ### Read settings file to get plate scale
 settingsDict={}
-settingsDict=ao.readSettingsFile(ao.koiDir(obj)+"settings_"+obj+".tsv")
+settingsFile = ao.koiDir(obj,instrUsed)+"settings_"+obj+".tsv"
+print settingsFile+"\n"
+settingsDict=ao.readSettingsFile(settingsFile)
+#### Change if some other Speckle instrument besides Steve Howell's first one (i.e., if Gemini)
+if instrUsed == "Speckle":
+	try:
+		plateScale = eval(settingsDict['Plate_scale_Speckle'])
+	except:
+		print "\n\nWARNING! using hardcoded plate scale in magLimits.py\n\n"
+		plateScale = 0.0228156
 #### Should we ever have plate scales differ on different filters, this will need to change
-plateScale = eval(settingsDict['Plate_scale_Ks'])
+else:
+	plateScale = eval(settingsDict['Plate_scale_Ks'])
+
+print "USING PLATE SCALE FOR",instrUsed,":",plateScale
 
 
 ### Read in .mag file 
@@ -57,29 +72,44 @@ print "Read .mag file: numStars=",numStars," apertures: ",apertures
 #### How significant do we want our contours to be?
 nSigma=5
 
-### How wide are our annuli?
-#deltaArcsec=0.1 # arcsec wide disks
-#delta = deltaArcsec / plateScale
-#
 ### Set up ranges of arcsec; they have different spacing so we don't waste time on a fine grid away from the star
 #### We could set the inner angle based on the seeing, but it's easier to just get rid of the close ones later
-#aa = np.arange(0.0125 ,0.45, deltaArcsec/4.)
-#print aa
-#bb = np.arange(0.45, 2.05, deltaArcsec)
-#cc = np.arange(2.5, 10.05, deltaArcsec*10)
-#annuliArcsec =aa.tolist() + bb.tolist()+ cc.tolist()
-#midAnnuliArcsec = np.array( (aa+deltaArcsec/8.).tolist() + (bb+deltaArcsec/2.).tolist() + (cc+deltaArcsec*5.).tolist())
-#annuli = np.array(annuliArcsec) / plateScale
-####### Redo to guarantee the same apertures
-aa = np.array([0.05,0.10,0.15,0.20])
-#print aa
-bb = np.array([0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0])
-cc = np.array([2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0])
-midAnnuliArcsec =aa.tolist() + bb.tolist()+ cc.tolist()
-print midAnnuliArcsec
-annuliArcsec = np.array( (aa-0.025).tolist() + (bb-0.1).tolist() + (cc-1).tolist())
-annuli = np.array(annuliArcsec) / plateScale
-#print "Annuli:", annuli
+
+### This is set up to mimic the way the code was run back in summer '12
+legacyMode = True
+if legacyMode == True:
+	plateScale = 0.02 ### you'll have a problem if it is actually 0.04
+	### How wide are our annuli?
+	deltaArcsec=0.1 # arcsec wide disks
+	delta = deltaArcsec / plateScale
+	#
+	aa = np.arange(0.0125 ,0.45, deltaArcsec/4.)
+	#print aa
+	bb = np.arange(0.45, 2.05, deltaArcsec)
+	cc = np.arange(2.5, 10.05, deltaArcsec*10)
+	annuliArcsec =aa.tolist() + bb.tolist()+ cc.tolist()
+	midAnnuliArcsec = np.array( (aa+deltaArcsec/8.).tolist() + (bb+deltaArcsec/2.).tolist() + (cc+deltaArcsec*5.).tolist())
+	annuli = np.array(annuliArcsec) / plateScale
+
+else:
+	####### Redo to guarantee the same apertures
+	aa = np.array([0.05,0.10,0.15,0.20])
+	aa2 = np.array([0.025,0.05,0.10,0.15,0.20])
+	#print aa
+	bb = np.array([0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0])
+	cc = np.array([2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0])
+	
+	if instrUsed == "Speckle":
+		midAnnuliArcsec =aa2.tolist() + bb.tolist()
+		annuliArcsec = np.array( (aa2-0.025).tolist() + (bb-0.05).tolist())
+		annuli = np.array(annuliArcsec) / plateScale
+	else:
+		midAnnuliArcsec =aa.tolist() + bb.tolist()+ cc.tolist()
+		annuliArcsec = np.array( (aa-0.025).tolist() + (bb-0.05).tolist() + (cc-0.5).tolist())
+		annuli = np.array(annuliArcsec) / plateScale
+
+
+print "Annuli:", annuli,"\n"
 
 
 cr=['\n']
@@ -136,24 +166,31 @@ peakPixelCount=getPeakPixel()
 
 
 ############# Get 2MASS magnitude ############
+print filt
 try:
 	if filt == "J":
 		ourMag = float(eval(settingsDict["2MASS_J"])[0])		
 	elif filt == "H":
 		ourMag = float(eval(settingsDict["2MASS_H"])[0])		
-	else:
+	elif filt == "Ks":
 		ourMag = float(eval(settingsDict["2MASS_Ks"])[0])		
-	
-	kepMag = kepler.kepMagCiardi(filt,ourMag)
+	else: ### We should get other catalogs in here!
+		ourMag = "NA"
 except:
 	ourMag = "NA"
+
+try:
+	kepMag = kepler.kepMagCiardi(filt,ourMag)
+except:
 	kepMag = "NA"
 	
 
 ###########################################################################
+print "\n\n",annuli,skyBkgDict,"\n\n"
+
 
 ### Create output file
-limMagFile=fitsDir+fitsFile+"_lim.tsv"
+limMagFile=ao.limMagFile(obj,filt,instrUsed)
 g = open(limMagFile,'w')
 print >>g,"File:",fitsFile
 #print >>g,"Camera-mode:",cameraMode

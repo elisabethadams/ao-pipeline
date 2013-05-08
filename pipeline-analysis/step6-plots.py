@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Step 5 of AO compilation pipeline: make plots
+# Step 7 of AO compilation pipeline: make plots
 #     Prereqs:
 #       0. run step3-findlimits.py (makes OBJECT_Filt.fits_lim.tsv, assumed to exist in this script)
 #     This script will:
@@ -17,6 +17,7 @@ import pylab
 import datetime
 import math
 import matplotlib.cm as cm
+import aplpy
 
 # User packages
 pipelineDir = os.path.dirname(os.path.realpath(__file__))
@@ -30,6 +31,15 @@ import koiPlusFilter
 import finderPlots
 
 
+##### Read in alternate instrument directory (if not "ARIES")
+args = sys.argv
+if len(args)>1:
+	instrUsed = str(args[1])
+else:
+	instrUsed = "ARIES"
+objectDataDir = ao.objDirByInstr(instrUsed)
+print "\nLooking for objects in directory: \n "+objectDataDir+"\n"
+
 ### Read in which objects to use
 if os.path.exists("usingObjects.txt"):
 	data = open("usingObjects.txt","r")
@@ -39,7 +49,7 @@ if os.path.exists("usingObjects.txt"):
 		useObjects.append(line.rstrip())
 else:
 	print "The file does not exist. Running all objects..."
-	objectDirListing=os.listdir(ao.objectsDir)
+	objectDirListing=os.listdir(objectDataDir)
 	useObjects = []
 	for obj in objectDirListing:
 		useObjects.append(obj)
@@ -62,13 +72,19 @@ createIndividualPlots = False
 if createIndividualPlots:
 	for filt in filters:
 		for obj in useObjects:
-			fitsFile=ao.koiFilterDir(obj,filt)+ao.finalKOIimageFile(obj,filt)
+			fitsFile=ao.koiFilterDir(obj,filt,instrUsed) + ao.finalKOIimageFile(obj,filt,instrUsed)
 			if os.path.isfile(fitsFile):
 				## Could also call finderPlots directly
-				os.system("./finderPlots.py "+obj+" "+filt)
+				os.system("./finderPlots.py "+obj+" "+filt+ " "+instrUsed)
 			
 
-####### Functions
+######## Settings ##########
+#colorScheme = cm.jet    # blues
+#colorScheme = cm.hot    # white-red on black
+colorScheme = cm.gray    # grayscale
+
+
+######## Functions ######### 
 
 # Make zoomed-in-only plots for binary KOI
 def makeCompositePlotOfZoomedInImages(filt):
@@ -81,9 +97,9 @@ def makeCompositePlotOfZoomedInImages(filt):
 		nrows = nkoi / ncols +1
 	print nrows, len(koiForCompositePlot[filt])
 	for ii,koi in enumerate(koiForCompositePlot[filt]):
-		myKoi = koiPlusFilter.koiPlusFilter(koi,filt)
+		myKoi = koiPlusFilter.koiPlusFilter(koi,filt,instrUsed)
 		print ii, koi, filt
-		if os.path.isfile(ao.objectsDir+koi+"/"+filt[0]+"/"+ao.finalKOIimageFile(koi,filt)):
+		if os.path.isfile(ao.objectsDir+koi+"/"+filt[0]+"/"+ao.finalKOIimageFile(koi,filt,instrUsed)):
 			finderPlots.zoomedInSubPlot(myKoi,nrows,ncols,ii+1)
 			pylab.title(koi)
 	# Finish and export
@@ -95,6 +111,7 @@ def makeCompositePlotOfZoomedInImages(filt):
 #makeCompositePlotOfZoomedInImages("J")
 #makeCompositePlotOfZoomedInImages("Ks")
 
+##### Obsolete/not updated recently #####
 def makeCompositePlotOfZoomedInImages(koiAndFilterList):
 	fig=pylab.figure(0,figsize=(5,10))
 	nkoi = len(koiAndFilterList)
@@ -110,7 +127,7 @@ def makeCompositePlotOfZoomedInImages(koiAndFilterList):
 		filt = kkff[1]
 		myKoi = koiPlusFilter.koiPlusFilter(koi,filt)
 		print ii, koi, filt
-		if os.path.isfile(ao.objectsDir+koi+"/"+filt[0]+"/"+ao.finalKOIimageFile(koi,filt)):
+		if os.path.isfile(ao.koiFilterDir(koi,filt,instrUsed)+ao.finalKOIimageFile(koi,filt,instrUsed)):
 #			pylab.subplot(nrows,ncols,ii+1)
 			finderPlots.zoomedInSubPlot(myKoi,nrows,ncols,ii+1)
 					
@@ -130,7 +147,7 @@ def makeCompositePlotOfZoomedInImages(koiAndFilterList):
 
 			
 #### Make omnibus combined plot: all filters, J/Ks
-def makeOmniPlot(koiList,name,npix,useHalfBox=2.0,ncols=4, scalebarLabel="", noLabels=False, figWidth=12, useFilts=["J","Ks"], useInstr= ["ARIES","PHARO"], plotExt=".pdf"):
+def makeOmniPlot(koiList,name,npix,useHardCodedFigSize=False, useHalfBox=2.0,ncols=4, scalebarLabel="", noLabels=False, figWidth=12, useFilts=["J","Ks"], useInstr= ["ARIES","PHARO"], plotExt=".pdf", plotContourList=False, extraScalebar=False):
 	if (npix % ncols) == 0:
 		nrows = npix/ncols
 	else:
@@ -139,6 +156,9 @@ def makeOmniPlot(koiList,name,npix,useHalfBox=2.0,ncols=4, scalebarLabel="", noL
 		fig=pylab.figure(0,figsize=(figWidth,3.5*nrows))
 	elif ncols ==3:
 		fig=pylab.figure(0,figsize=(figWidth,4.25*nrows))
+	elif useHardCodedFigSize != False:
+		fig=pylab.figure(0,figsize=(useHardCodedFigSize[0],useHardCodedFigSize[1]))
+		
 	else:
 		fig=pylab.figure(0,figsize=(4,2.5*nrows))
 	ii=0
@@ -164,11 +184,22 @@ def makeOmniPlot(koiList,name,npix,useHalfBox=2.0,ncols=4, scalebarLabel="", noL
 					if os.path.isdir(ao.koiFilterDir(koi,filt,instr)):
 						print koi, instr, filt, ii
 						myKoi = koiPlusFilter.koiPlusFilter(koi,filt,instr)
-						finderPlots.zoomedInSubPlot(myKoi,nrows,ncols,ii+1,useColorMap=cm.hot)
+						if plotContourList == False:
+							useContours = False
+						else:
+							useContours = plotContourList[ii]
+						if ii == 0: ## only plot the (optional) scale bar on the first image
+							finderPlots.zoomedInSubPlot(myKoi,nrows,ncols,ii+1,useColorMap=colorScheme,plotContours=useContours,plotLowerScalebar=extraScalebar,scalebarLabel=scalebarLabel)
+						else:
+							finderPlots.zoomedInSubPlot(myKoi,nrows,ncols,ii+1,useColorMap=colorScheme,plotContours=useContours,plotLowerScalebar=False)
 						if noLabels == False:
-							pylab.title(koi+"\n"+instr+" "+filt)
+							if (len(useFilts)==1 & (len(useInstr)==1)):
+								pylab.title(koi)
+							else:
+						#		pylab.title(koi+"\n"+instr+" "+filt)
+								pylab.title(koi+" "+" "+filt+" ("+scalebarLabel+")")
 						ii = ii + 1
-
+							
 	# Finish and export
 	pylab.subplots_adjust(wspace=0.1,hspace=0.1)
 	binaryOutfile = ao.plotDir+"allBinaries_"+name+plotExt
@@ -177,6 +208,9 @@ def makeOmniPlot(koiList,name,npix,useHalfBox=2.0,ncols=4, scalebarLabel="", noL
 	else:
 		pylab.savefig(binaryOutfile)
 	pylab.close()
+
+
+
 
 def makeSingleImagePrettyPlot(koi, outfile, useFilts=["J","Ks"], useInstr="ARIES", showColorBar=True, useScaleMin=0, useScaleMax=100,useColorMap=cm.jet, showArrows=True, useArrowScale=1):
 	print "\n gersdaf",useArrowScale,"\nsdlkfjdkfj"
@@ -198,10 +232,14 @@ def makeSingleImagePrettyPlot(koi, outfile, useFilts=["J","Ks"], useInstr="ARIES
 	pylab.close()	
 
 
-######################## Some settings for compilation plots I have made ################
-#### Note that the scalebars are TEXT labels; the actual size of the scalebar is set in the koiPlusFilter class
+###############################################################################################
+###                      Some settings for compilation plots I have made                    ###
+###  Note: scalebars are TEXT labels only; change actual size in the koiPlusFilter class    ###
+###############################################################################################
 
-### For AJ paper I
+######################
+### For AJ paper I ###
+######################
 #makeOmniPlot(	["K00013","K00018","K00042","blank","scalebar","K00068","blank","K00097","K00118","K00141","K00258","K00268","K00284","K00285","K00975"],"2",28,ncols=4,scalebarLabel="6\"",plotExt=".eps")
 
 #makeOmniPlot(	["K00098","K00112","K00113","K00264","K00270","K00292","blank","scalebar"],"05",16,ncols=4,scalebarLabel="2\"",plotExt=".eps")
@@ -210,14 +248,41 @@ def makeSingleImagePrettyPlot(koi, outfile, useFilts=["J","Ks"], useInstr="ARIES
 #makeOmniPlot(	["K00258"],"K00258",2,ncols=2,scalebarLabel="xx",plotExt=".eps")
 #makeOmniPlot(	["K00268"],"K00268",2,ncols=2,scalebarLabel="xx",plotExt=".eps")
 
-############# Make a single image for a paper (using full image view) ##############
-# options:   makeSingleImagePrettyPlot(koi, outfile, useFilts=["J","Ks"], useInstr="ARIES", showColorBar=True, useScaleMin=0, useScaleMax=100,useColorMap=cm.jet, showArrows=True, useArrowScale=1):
+####################################################################
+###   Make a single image for a paper (using full image view)    ###
+####################################################################
+### options:   makeSingleImagePrettyPlot(koi, outfile, useFilts=["J","Ks"], useInstr="ARIES", showColorBar=True, useScaleMin=0, useScaleMax=100,useColorMap=cm.jet, showArrows=True, useArrowScale=1):
 
-#makeSingleImagePrettyPlot("K00094", ao.plotDir+"K00094_paper.eps",showColorBar=False,useScaleMin=30,useScaleMax=80, useColorMap=cm.gray, showArrows=True, useArrowScale=2)
-#makeSingleImagePrettyPlot("K00094", ao.plotDir+"K00094_paper.pdf",showColorBar=False,useScaleMin=30,useScaleMax=80, useColorMap=cm.gray, showArrows=True, useArrowScale=2)
+makeSingleImagePrettyPlot("K00094", ao.plotDir+"K00094_paper_rev.eps",showColorBar=False,useScaleMin=30,useScaleMax=80, useColorMap=cm.gray, showArrows=True, useArrowScale=2)
+makeSingleImagePrettyPlot("K00094", ao.plotDir+"K00094_paper_rev.pdf",showColorBar=False,useScaleMin=30,useScaleMax=80, useColorMap=cm.gray, showArrows=True, useArrowScale=2)
 
-############# How to make multiple plots for a paper (using zoomed-in view) ##############
+## For revision to Lauren Weiss's paper
+#makeOmniPlot(["K00094"], "K00094_12",2,ncols=2,scalebarLabel="12\"", useFilts=["J","Ks"], useInstr= ["ARIES"], useHardCodedFigSize=[10,5], plotExt=".pdf")
+#makeOmniPlot(["K00094"], "K00094_12",2,ncols=2,scalebarLabel="12\"", useFilts=["J","Ks"], useInstr= ["ARIES"], useHardCodedFigSize=[10,5], plotExt=".eps")
+#makeOmniPlot(["K00094"], "K00094_24",2,ncols=2,scalebarLabel="24\"", useFilts=["J","Ks"], useInstr= ["ARIES"], useHardCodedFigSize=[10,5], plotExt=".pdf")
+#makeOmniPlot(["K00094"], "K00094_24",2,ncols=2,scalebarLabel="24\"", useFilts=["J","Ks"], useInstr= ["ARIES"], useHardCodedFigSize=[10,5], plotExt=".eps")
+
+ 
+##########################################################################
+###   How to make multiple plots for a paper (using zoomed-in view)    ###
+##########################################################################
 # options:  makeOmniPlot(koiList,name,npix,useHalfBox=2.0,ncols=4, scalebarLabel="", noLabels=False, figWidth=12, useFilts=["J","Ks"], useInstr= ["ARIES","PHARO"], plotExt=".pdf"):
 
-#makeOmniPlot(gb.flattenList([useObjects,["scalebar"]]),"nonkep",16,ncols=4,scalebarLabel="6\"",plotExt=".pdf")
-makeOmniPlot(gb.flattenList([useObjects,["scalebar"]]),"nonkep",16,ncols=4,scalebarLabel="6\"",plotExt=".eps")
+
+#######################
+### For AJ paper II ###
+#######################
+
+#near = ["K00174", "K01537","scalebar"]
+#far = ["K01316", "HAT-P-30b", "HAT-P-32b", "TrES-1b", "WASP-2b", "WASP-33b","scalebar"]
+near = ["K00174", "K01537"]
+far = ["K00555", "K01316", "HAT-P-30b", "HAT-P-32b", "TrES-1b","scalebar", "WASP-2b", "WASP-33b"]
+
+#makeOmniPlot(near, "aoIInear",2,ncols=2,scalebarLabel="2\"", useFilts=["Ks"], useInstr= ["ARIES"], plotContourList=[True,False], extraScalebar=True, plotExt=".pdf")
+#makeOmniPlot(near, "aoIInear",2,ncols=2,scalebarLabel="2\"", useFilts=["Ks"], useInstr= ["ARIES"], plotContourList=[True,False], extraScalebar=True, plotExt=".eps")
+
+#makeOmniPlot(far, "aoIIfar",8,ncols=2,scalebarLabel="8\"", useFilts=["Ks"], useInstr= ["ARIES"],  plotExt=".pdf")
+#makeOmniPlot(far, "aoIIfar",8,ncols=2,scalebarLabel="8\"", useFilts=["Ks"], useInstr= ["ARIES"],  plotExt=".eps")
+
+#makeOmniPlot(["K00174"], "K00174",1,ncols=1,scalebarLabel="2\"", useFilts=["Ks"], useInstr= ["ARIES"],  plotExt=".pdf", plotContours=True)
+

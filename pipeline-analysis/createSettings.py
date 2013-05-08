@@ -2,7 +2,9 @@
 #
 # #  new 2012-08-10: add 2MASS catalog value for J/H/K
 #
+#   2014-05-08: get rid of raw data directory, it's too stupid for cross platform work
 #  Purpose: to store all of the items needed for a given object in one place
+#
 
 ################## BEGIN PREAMBLE ###########################
 
@@ -20,16 +22,24 @@ moduleDir = string.replace(pipelineDir,"pipeline-analysis","modules")
 sys.path.append(moduleDir) 
 
 import ao
+import aries
 import grabBag as gb
 import kepler
 import catalogs
 ################### END PREAMBLE ############################
 
 args = sys.argv
+### Is this called with one object only? By default do all of them
 try:
 	obj = args[1]
 except:
 	obj = "All"
+### And is the instrument used other than "ARIES"?
+try:
+	instrUsed = args[2]
+except:
+	instrUsed = "ARIES"
+
 
 useObjects = []
 if obj == "All":
@@ -61,7 +71,8 @@ rerun = False
 
 ## All available settings
 ## Note that order matters here:
-allKeys = ["KOI", "Night", "Raw_data_dir", "FrameList_J", "FrameList_Ks", "RefFrame_J", "RefFrame_Ks", "Plate_scale_J", "Plate_scale_Ks", "TargetPixelRange_J", "TargetPixelRange_Ks","2MASS_J","2MASS_H","2MASS_Ks"]
+## DEPRECATED: "Raw_data_dir",
+allKeys = ["KOI", "Instrument","Night",  "FrameList_J", "FrameList_Ks", "RefFrame_J", "RefFrame_Ks", "Plate_scale_J", "Plate_scale_Ks", "TargetPixelRange_J", "TargetPixelRange_Ks","2MASS_J","2MASS_H","2MASS_Ks"]
 
 ### Functions
 def setDictValues(keyword):
@@ -70,18 +81,12 @@ def setDictValues(keyword):
 #		print "This was set to something:",keyword,oldSettings[keyword]
 #	else:
 #		print "nothing here:",keyword
-	
-	
 	if (oldSettings[keyword] != "XX"):
 		useValue = oldSettings[keyword]
-#### This bit is to fix the less-accurate values that were still floating around		
-#		if keyword == "Plate_scale_Ks":
-#			if oldSettings[keyword] == "0.02":
-#				useValue = "0.02085"
-#			elif oldSettings[keyword] == "0.04":
-#				useValue = "0.0417"
-				
-	# Otherwise set defaults	
+
+	# Otherwise set defaults
+	elif keyword == "Instrument":
+		useValue = instrUsed
 	elif keyword == "Night":
 		try:
 			useValue = aries.objectsForNight[obj] ## a dict, not a function
@@ -96,12 +101,12 @@ def setDictValues(keyword):
 		useValue = "XX"
 	elif keyword == "Plate_scale_J":
 		try:
-			useValue = ao.getPlateScaleFromHeader(ao.koiFilterDir(obj,"J")+ao.finalKOIimageFile(obj,"J"),True)
+			useValue = ao.getPlateScaleFromHeader(ao.koiFilterDir(obj,"J")+ao.finalKOIimageFile(obj,"J"),True,instrUsed)
 		except:
 			useValue = "XX"
 	elif keyword == "Plate_scale_Ks":
 		try:
-			useValue = ao.getPlateScaleFromHeader(ao.koiFilterDir(obj,"Ks")+ao.finalKOIimageFile(obj,"Ks"),True)
+			useValue = ao.getPlateScaleFromHeader(ao.koiFilterDir(obj,"Ks")+ao.finalKOIimageFile(obj,"Ks"),True,instrUsed)
 		except:
 			useValue = "XX"
 	elif keyword == "2MASS_J":
@@ -123,8 +128,8 @@ def setDictValues(keyword):
 	# Here are the ones that get superceded
 	if keyword == "KOI":
 		useValue = obj
-	if keyword == "Raw_data_dir":
-		useValue = ao.dataDir+settingsDict["Night"]+"/"
+###	if keyword == "Raw_data_dir":
+###		useValue = ao.dataDir+settingsDict["Night"]+"/"
 		
 	# Notify user if there are missing, required entries
 	if useValue == "XX":
@@ -138,7 +143,7 @@ magDict=catalogs.all2MASS()
 objects2MASS = catalogs.get2MASSobjects()
 	
 for obj in useObjects:
-	settingsFile = ao.settingsFile(obj) 
+	settingsFile = ao.settingsFile(obj,instrUsed) 
 	
 	## By default set the oldSettings to not exist (so things work when you add new keywords)
 	oldSettings={}

@@ -57,9 +57,13 @@ class koiPlusFilter:
 		if (koi == "K00013") & (instr == "ARIES"):
 			self.extraX = self.extraX +20
 			self.extraY = self.extraY - 50
-		if (koi == "K00094") & (instr == "ARIES"): ### optimized for big plot
-			self.extraX = self.extraX + 20
-			self.extraY = self.extraY + 820
+		if (koi == "K00094") & (instr == "ARIES"): 
+			self.extraX = self.extraX + 20 ### optimized for big plot
+			self.extraY = self.extraY + 780 ### optimized for big plot
+		#	self.extraX = self.extraX - 30 ### 12"
+		#	self.extraY = self.extraY + 30 ### 12"
+		#	self.extraX = self.extraX - 60 ### 24"
+		#	self.extraY = self.extraY + 60 ### 24"
 		if (koi == "K00097") & (instr == "ARIES"):
 			self.extraX = self.extraX -10
 			self.extraY = self.extraY - 0
@@ -72,6 +76,9 @@ class koiPlusFilter:
 		if (koi == "K00141") & (instr == "ARIES") & (filt == "Ks"):
 			self.extraX = self.extraX -5
 			self.extraY = self.extraY +0
+		if (koi == "K00174") & (instr == "ARIES"):
+			self.extraX = self.extraX +2
+			self.extraY = self.extraY -10
 		if (koi == "K00263") & (instr == "ARIES"):
 			self.extraX = self.extraX +60
 			self.extraY = self.extraY -10
@@ -84,6 +91,12 @@ class koiPlusFilter:
 		if (koi == "K00268") & (instr == "ARIES"):
 			self.extraX = self.extraX +20
 			self.extraY = self.extraY -20
+		if (koi == "K00700") & (instr == "ARIES"):
+			self.extraX = self.extraX + 0
+			self.extraY = self.extraY -150
+		if (koi == "K01054") & (instr == "ARIES"):
+			self.extraX = self.extraX +150
+			self.extraY = self.extraY - 0
 		if (koi == "HAT-P-6b") & (instr == "ARIES"):
 			self.extraX = self.extraX +0
 			self.extraY = self.extraY +20
@@ -116,7 +129,8 @@ class koiPlusFilter:
 	def peakScaleFactorForKOI(self,koi,filt,instr):
 		peakScaleFactor={}
 		peakScaleFactor[koi,filt,"PHARO"]=[0,20000]
-		peakScaleFactor[koi,filt,"ARIES"]=[0,1000]
+#		peakScaleFactor[koi,filt,"ARIES"]=[0,1000]
+		peakScaleFactor[koi,filt,"ARIES"]=[-10,2500] ## for 2011
 		peakScaleFactor["K00013","J","ARIES"]=[0.001,3000]
 		peakScaleFactor["K00013","Ks","ARIES"]=[-10,3000]
 		peakScaleFactor["K00018","J","PHARO"]=[-10,400]
@@ -125,8 +139,8 @@ class koiPlusFilter:
 		peakScaleFactor["K00068","J","ARIES"]=[-20,500]
 		peakScaleFactor["K00068","Ks","ARIES"]=[-10,300]
 		peakScaleFactor["K00068","J","PHARO"]=[-20,4000]
-		peakScaleFactor["K00094","J","ARIES"]=[0,500]
-		peakScaleFactor["K00094","Ks","ARIES"]=[0,500]
+		peakScaleFactor["K00094","J","ARIES"]=[-40,500]## For Lauren Weiss's paper
+		peakScaleFactor["K00094","Ks","ARIES"]=[-40,500] ## For Lauren Weiss's paper
 		peakScaleFactor["K00097","J","ARIES"]=[0,1000]
 		peakScaleFactor["K00097","Ks","ARIES"]=[0,1000]
 		peakScaleFactor["K00098","J","ARIES"]=[10,9000]
@@ -139,6 +153,7 @@ class koiPlusFilter:
 		peakScaleFactor["K00113","Ks","PHARO"]=[-100,5000]
 		peakScaleFactor["K00118",filt,"PHARO"]=[-10,5000]
 		peakScaleFactor["K00141",filt,"ARIES"]=[-10,2000]
+		peakScaleFactor["K00174",filt,"ARIES"]=[0,3000]
 		peakScaleFactor["K00264","J","ARIES"]=[0,6000]
 		peakScaleFactor["K00264","Ks","ARIES"]=[0,3000]
 		peakScaleFactor["K00258",filt,"ARIES"]=[0,800]
@@ -151,26 +166,29 @@ class koiPlusFilter:
 		peakScaleFactor["K00285","Ks","PHARO"]=[0,200]
 		peakScaleFactor["K00292","J","PHARO"]=[-10,1500]
 		peakScaleFactor["K00292","Ks","PHARO"]=[-10,1500]
+		peakScaleFactor["K00555","Ks","ARIES"]=[-20,100]
 		peakScaleFactor["K00975","J","ARIES"]=[-10,1500]
 		peakScaleFactor["K00975","Ks","ARIES"]=[0,1000]
-		peakScaleFactor["K01537","Ks","ARIES"]=[0,12000]
+		peakScaleFactor["K01316","Ks","ARIES"]=[-20,150]
+		peakScaleFactor["K01537","Ks","ARIES"]=[-30,11000]
 		peakScaleFactor["HAT-P-9b","Ks","ARIES"]=[0,1000]
-		peakScaleFactor["HAT-P-30b","Ks","ARIES"]=[0,500]
-		peakScaleFactor["HAT-P-33b","Ks","ARIES"]=[0,1000]
-		peakScaleFactor["WASP-2b","Ks","ARIES"]=[0,2000]
-		peakScaleFactor["TrES-1b","Ks","ARIES"]=[0,100]
-		peakScaleFactor["Corot-1b","Ks","ARIES"]=[0,100]
+		peakScaleFactor["HAT-P-30b","Ks","ARIES"]=[-20,100]
+		peakScaleFactor["HAT-P-32b","Ks","ARIES"]=[-20,100]
+		peakScaleFactor["WASP-2b","Ks","ARIES"]=[-20,800]
+		peakScaleFactor["WASP-33b","Ks","ARIES"]=[-20,200]
+		peakScaleFactor["TrES-1b","Ks","ARIES"]=[-10,80]
 		return peakScaleFactor[koi,filt,instr]
 	
 	### ARIES does NOT always have E and N in consistent directions
 	### Here we define the sequence of flips and rotations to use to get images approximately N up, E left
 	def rotateImage(self,koi,filt,instr):
 		rotateBy={}
-		## [number of times to rotate 90 deg, flip up-down, flip left-right], done in reverse order
+		## [number of times to rotate 90 deg, boolean flip up-down, boolean flip left-right], applied in reverse order
 		rotateBy[koi,filt,"PHARO"]=[0, False, False]
 		rotateBy[koi,filt,"ARIES"]=[3, True, False]
 		rotateBy["K00013",filt,"ARIES"]=[2, False, True]
 		rotateBy["K00097",filt,"ARIES"]=[1, True, False]
+#		rotateBy["K00094",filt,"ARIES"]=[1, True, False]
 		rotateBy["K00098",filt,"ARIES"]=[1, True, False]
 		rotateBy["K00141",filt,"ARIES"]=[1, True, False]
 		rotateBy["K00264",filt,"ARIES"]=[0, True, False]
@@ -178,7 +196,18 @@ class koiPlusFilter:
 		rotateBy["K00270",filt,"ARIES"]=[0, True, False]
 		rotateBy["K00975",filt,"ARIES"]=[1, True, False]
 		rotateBy["K00258",filt,"ARIES"]=[0, True, False]
+		rotateBy["K00174",filt,"ARIES"]=[1, True, False]
+		rotateBy["K00341",filt,"ARIES"]=[1, True, True]
+		rotateBy["K00555",filt,"ARIES"]=[1, True, False]
+		rotateBy["K00638",filt,"ARIES"]=[0, True, False]
+		rotateBy["K00700",filt,"ARIES"]=[0, True, False]
+		rotateBy["K00961",filt,"ARIES"]=[1, True, False]
+		rotateBy["K00973",filt,"ARIES"]=[1, True, False]
+		rotateBy["K00979",filt,"ARIES"]=[1, True, False]
+		rotateBy["K01054",filt,"ARIES"]=[2, True, False]
+		rotateBy["K01316",filt,"ARIES"]=[1, True, False]
 		rotateBy["K01537",filt,"ARIES"]=[1, True, False]
+		rotateBy["K01883",filt,"ARIES"]=[1, True, False]
 		rotateBy["Corot-1b",filt,"ARIES"]=[2, True, False]
 		rotateBy["HAT-P-6b",filt,"ARIES"]=[0, True, False]
 		rotateBy["HAT-P-17b",filt,"ARIES"]=[1, True, False]
@@ -209,6 +238,10 @@ class koiPlusFilter:
 		betterRefNum["K00261","J"]=26
 		betterRefNum["K00268","J"]=3
 		betterRefNum["K00270","J"]=10
+		betterRefNum["K00555","Ks"]=8
+		betterRefNum["K00638","Ks"]=4
+		betterRefNum["K00961","Ks"]=3
+		betterRefNum["K01316","Ks"]=2
 		betterRefNum["K00974","J"]=5
 		betterRefNum["K01537","Ks"]=5
 		betterRefNum["HAT-P-30b","Ks"]=5
@@ -218,19 +251,26 @@ class koiPlusFilter:
 	#### Settings for plot sizes, scales
 	## Objects with very close companions should be zooomed in
 	def getZoomedBoxSizeForKOI(self,koi):
+		# 6 arcsec on a side
 		defaultSizeArcsec = 3.0 ### half-size
-		# 6 arcsec boxes
-		if koi in ["K00098","K00112","K00113","K00264","K00270","K00292","K01537"]:
+		# 2 arcsec boxes
+		if koi in ["K00098","K00112","K00113","K00174","K00264","K00270","K00292","K01537"]:
 			self.lengthScale=0.33  ### i.e., 0.33 * 3 = 1" half-size
 			self.labelLengthScale=1.3
 			return defaultSizeArcsec*self.lengthScale
-		elif koi in ["K00094"]:
+		# 8 arcsec boxes
+		elif koi in ["K00555","K01316", "HAT-P-30b", "HAT-P-32b", "TrES-1b", "WASP-2b", "WASP-33b"]:
 			self.lengthScale=4/3.
 			self.labelLengthScale=1.4
 			return defaultSizeArcsec*self.lengthScale
-		## 4 arcsec boxes
-		elif koi in ["Corot-1b", "HAT-P-17b", "HAT-P-25b","HAT-P-30b", "HAT-P-32b", "HAT-P-33b", "HAT-P-6b", "HAT-P-9b", "HD17156b", "TrES-1b", "WASP-1b", "WASP-2b", "WASP-33b", "XO-3b", "XO-4b"]:
-			self.lengthScale=1.0
+		# 12 arcsec boxes
+		elif koi in ["K00094"]:
+			self.lengthScale=2.
+			self.labelLengthScale=1.4
+			return defaultSizeArcsec*self.lengthScale
+		# 24 arcsec boxes
+		elif koi in [""]:
+			self.lengthScale=4.
 			self.labelLengthScale=1.4
 			return defaultSizeArcsec*self.lengthScale
 		else:	
@@ -326,7 +366,6 @@ class koiPlusFilter:
 #		self.scidata = f[0].data
 		self.scidata = np.array( f[0].data ) + self.artificialBoostToAvoidZeroBkg
 		self.scidataZoomed = self.scidata[self.lowerY:self.upperY,self.lowerX:self.upperX]
-		#rotateBy[koi,filt,"ARIES"]=[2, True, False]
 		## [number of times to rotate 90 deg, flip x, flip y], done in reverse order
 		if self.rotation==[0,False,False]:
 			foo = 1

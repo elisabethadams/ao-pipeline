@@ -18,8 +18,8 @@ import grabBag as gb
 
 #### Kepler-specific inputs
 ### These need to be periodically updated as new KOIs are added
-kfopIDtargetFile = ao.infoDir + "KFOP/targets_all_20120730.html"
-defaultKSASfile = ao.infoDir + "ksasAllKOI_2011Aug.csv"
+kfopIDtargetFile = ao.infoDir + "Catalogs/KFOP/targets_all_20120730.html"
+defaultKSASfile = ao.infoDir + "Catalogs/KSAS/ksasAllKOI_2011Aug.csv"
 
 
 ### Magnitude conversions: go from J, K, or J-K to estimated Kepler mag
