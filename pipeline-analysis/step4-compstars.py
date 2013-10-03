@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Step 4 of AO compilation pipeline: list all detected comp stars (stars_object.tsv)
+# Step 4 of AO compilation pipeline: list all detected comp stars (stars_object_FILT.tsv)
 #     Prereqs:
 #       0. run step2-getmag.py (makes OBJECT_Filt.fits.mag, assumed to exist)
 #     This script will:
@@ -154,116 +154,128 @@ def getPA(deltaXstar,deltaYstar,northDeltaX,northDeltaY,eastDeltaX,eastDeltaY):
 
 
 ##### All stars for one object within a given distLimit in arcsec
-def tableForEachStar(obj, distLimit,filt):
-#	print "Output all stars within",distLimit,"arcsec to:",ao.starsFile(obj,instrUsed)
-	g = open(ao.starsFile(obj,instrUsed),"w")
+def tableForEachStar(obj, distLimit):
+	print "Output all stars within",distLimit,"arcsec to:",ao.starsFile(obj,instr=instrUsed)
+	g = open(ao.starsFile(obj,instr=instrUsed),"w")
 	print >>g, "\t".join(["object",obj])
 	
-	if obj in objectDict[filt]:
-		
-		### Output fwhm for filter
-		print >>g, "\t".join([ filt, "fwhm", str(round(fwhmDict[obj,filt],2)) ])
-		### Does this object have additional nearby stars on the image?
-		apertures, starn, xySkyDict, starDict = ao.readPhotMagFile(ao.koiFilterDir(obj,filt,instrUsed), ao.finalKOIimageFile(obj,filt,instrUsed), magSuffix=".mag")
-	#	print os.path.isfile(ao.koiFilterDir(obj,filt,instrUsed)+ao.finalKOIimageFile(obj,filt,instrUsed)+".mag")
-		
-		### Make a koi class for use in undoing rotations
-		k = koiPlusFilter.koiPlusFilter(obj,filt,instrUsed)
-		refX = eval(xySkyDict[1][0])
-		refY = eval(xySkyDict[1][1])
-		refXerr = eval(xySkyDict[1][4])
-		refYerr = eval(xySkyDict[1][5])
-		if k.dir12 == "N":
-			northDeltaX = k.arrowDeltaX12
-			northDeltaY = k.arrowDeltaY12
-			eastDeltaX = k.arrowDeltaX10
-			eastDeltaY = k.arrowDeltaY10
+	for filt in filters:	
+		if obj in objectDict[filt]:
+			### Output fwhm for filter
+			print >>g, "\t".join([ filt, "fwhm", str(round(fwhmDict[obj,filt],2)) ])
+			### Does this object have additional nearby stars on the image?
+			apertures, starn, xySkyDict, starDict = ao.readPhotMagFile(ao.koiFilterDir(obj,filt,instrUsed), ao.finalKOIimageFile(obj,filt,instrUsed), magSuffix=".mag")
+		#	print os.path.isfile(ao.koiFilterDir(obj,filt,instrUsed)+ao.finalKOIimageFile(obj,filt,instrUsed)+".mag")
+			
+			### Make a koi class for use in undoing rotations
+			k = koiPlusFilter.koiPlusFilter(obj,filt,instrUsed)
+			refX = eval(xySkyDict[1][0])
+			refY = eval(xySkyDict[1][1])
+			refXerr = eval(xySkyDict[1][4])
+			refYerr = eval(xySkyDict[1][5])
+			if k.dir12 == "N":
+				northDeltaX = k.arrowDeltaX12
+				northDeltaY = k.arrowDeltaY12
+				eastDeltaX = k.arrowDeltaX10
+				eastDeltaY = k.arrowDeltaY10
+			else:
+				northDeltaX = k.arrowDeltaX10
+				northDeltaY = k.arrowDeltaY10
+				eastDeltaX = k.arrowDeltaX12
+				eastDeltaY = k.arrowDeltaY12
+			
+			closeComps = []
+			print obj, " has ",len(xySkyDict)-1," comp stars (any distance) in",filt
+			### Note stars are 1, not 0, indexed
+			for nn in range(1,len(xySkyDict)+1):
+				#### Distance ####
+			#	distPx = math.sqrt( (eval(xySkyDict[nn][0])-eval(xySkyDict[1][0]))**2 +  (eval(xySkyDict[nn][1])-eval(xySkyDict[1][1]))**2 )
+				thisX = eval(xySkyDict[nn][0]) 
+				thisY = eval(xySkyDict[nn][1])
+				thisXerr = eval(xySkyDict[nn][4])
+				thisYerr = eval(xySkyDict[nn][5])
+			#	print thisX, thisXerr, thisY, thisYerr, obj, refXerr, refYerr
+				deltaX =  thisX - refX
+				deltaY =  thisY - refY
+				deltaXerr = math.sqrt(thisXerr**2+refXerr**2)
+				deltaYerr = math.sqrt(thisYerr**2+refYerr**2)
+				## in pixels
+				if ((thisX == refX) & (thisY == refY)):
+					distPx = math.sqrt( (thisX-refX)**2 + (thisY-refY)**2 )
+					distErrPx = 0
+				else:
+					distPx, distErrPx = gb.distanceWithErrors(deltaX,deltaY,deltaXerr,deltaYerr)
+				## in arcsec
+				distArcsec = eval(settings[obj]["Plate_scale_"+filt]) * distPx
+				distArcsecErr = eval(settings[obj]["Plate_scale_"+filt]) * distErrPx
+				## Get position angles in degrees
+				useDeltaX, useDeltaY = undoRotations(k.rotation, deltaX, deltaY)
+			#	print "\nDiag:",useDeltaX, useDeltaY, "unflipped from",deltaX,deltaY,k.rotation
+				if ((thisX == refX) & (thisY == refY)):
+					angle = 0
+				else:
+					angle = getPA(useDeltaX, useDeltaY,northDeltaX,northDeltaY,eastDeltaX,eastDeltaY) 
+				#	print "Diag PA:", useDeltaX, useDeltaY, northDeltaX, northDeltaY, eastDeltaX, eastDeltaY, angle
+				#### Delta-magnitude ####
+				try:
+					deltaMag = eval(starDict[nn,'5.00'][3])-eval(starDict[1,'5.00'][3])
+				except:
+					deltaMag = eval(starDict[nn,'1.00'][3])-eval(starDict[1,'1.00'][3])
+					print obj,"WARNING: aperture of 1 instead of 5 px; mag values unreliable. A PSF fit binary?\n"
+	
+				### Now check if it is within our desired cutoff distance
+				if distArcsec <= distLimit:
+					closeComps.append([str(round(distArcsec,2)), str(round(deltaMag,2)), xySkyDict[nn][0], xySkyDict[nn][1], str(round(angle,1))])
+			#### We want to output the target star even if there are no others (for its pixel location and fwhm)
+		##	print obj,closeComps,"\n\n"
+			print >>g, "Star","Dist","Delta-mag","X_pixel","Y_pixel","PA"
+			for nn,comp in enumerate(closeComps):
+				listOut = gb.flattenList([[str(nn)], closeComps[nn]])
+				print >>g, gb.listToString(listOut,tab="\t")
 		else:
-			northDeltaX = k.arrowDeltaX10
-			northDeltaY = k.arrowDeltaY10
-			eastDeltaX = k.arrowDeltaX12
-			eastDeltaY = k.arrowDeltaY12
-		
-		
-		closeComps = []
-		print obj, " has ",len(xySkyDict)-1," comp stars (any distance)"
-		### Note stars are 1, not 0, indexed
-		for nn in range(1,len(xySkyDict)+1):
-			#### Distance ####
-		#	distPx = math.sqrt( (eval(xySkyDict[nn][0])-eval(xySkyDict[1][0]))**2 +  (eval(xySkyDict[nn][1])-eval(xySkyDict[1][1]))**2 )
-			thisX = eval(xySkyDict[nn][0]) 
-			thisY = eval(xySkyDict[nn][1])
-			thisXerr = eval(xySkyDict[nn][4])
-			thisYerr = eval(xySkyDict[nn][5])
-		#	print thisX, thisXerr, thisY, thisYerr, obj, refXerr, refYerr
-			deltaX =  thisX - refX
-			deltaY =  thisY - refY
-			deltaXerr = math.sqrt(thisXerr**2+refXerr**2)
-			deltaYerr = math.sqrt(thisYerr**2+refYerr**2)
-			## in pixels
-			if ((thisX == refX) & (thisY == refY)):
-				distPx = math.sqrt( (thisX-refX)**2 + (thisY-refY)**2 )
-				distErrPx = 0
-			else:
-				distPx, distErrPx = gb.distanceWithErrors(deltaX,deltaY,deltaXerr,deltaYerr)
-			## in arcsec
-			distArcsec = eval(settings[obj]["Plate_scale_"+filt]) * distPx
-			distArcsecErr = eval(settings[obj]["Plate_scale_"+filt]) * distErrPx
-			## Get position angles in degrees
-			useDeltaX, useDeltaY = undoRotations(k.rotation, deltaX, deltaY)
-		#	print "\nDiag:",useDeltaX, useDeltaY, "unflipped from",deltaX,deltaY,k.rotation
-			if ((thisX == refX) & (thisY == refY)):
-				angle = 0
-			else:
-				angle = getPA(useDeltaX, useDeltaY,northDeltaX,northDeltaY,eastDeltaX,eastDeltaY) 
-			#	print "Diag PA:", useDeltaX, useDeltaY, northDeltaX, northDeltaY, eastDeltaX, eastDeltaY, angle
-			#### Delta-magnitude ####
-			deltaMag = eval(starDict[nn,'5.00'][3])-eval(starDict[1,'5.00'][3])
-			### Now check if it is within our desired cutoff distance
-			if distArcsec <= distLimit:
-				closeComps.append([str(round(distArcsec,2)), str(round(deltaMag,2)), xySkyDict[nn][0], xySkyDict[nn][1], str(round(angle,1))])
-		#### We want to output the target star even if there are no others (for its pixel location and fwhm)
-	##	print obj,closeComps,"\n\n"
-		print >>g, "Star","Dist","Delta-mag","X_pixel","Y_pixel","PA"
-		for nn,comp in enumerate(closeComps):
-			listOut = gb.flattenList([[str(nn)], closeComps[nn]])
-			print >>g, gb.listToString(listOut,tab="\t")
+			print "object wasn't found for this filter:",obj,filt
+	
 	g.close()
-
-#################################################################################
-###              Create star tables for each object                           ###
-#################################################################################
-for obj in useObjects:	
-#	tableForEachStar(obj, closeDist)
-	tableForEachStar(obj, farDist, "Ks")
-#################################################################################
-#################################################################################
 
 
 ## Import dictionary from KSAS
 ksasDict = kepler.ksasData(["kepid","posglon","posglat", "kpmag","jmag","kmag"])
 
 ######## Make giant summary table for ALL objects
-def tableForAllStars(distCutoffArcsec=closeDist, filters =["Ks"], extra=""):
+def tableForAllStars(distCutoffArcsec=closeDist, filters =["J","Ks"], extra=""):
 	print "Making table of all stars within:",distCutoffArcsec," arcsec"
 	g  = open(ao.compFileSorted(distCutoffArcsec, extra+".tsv"),"w")
 	gTex = open(ao.compFileSorted(distCutoffArcsec, extra+".tex"),"w")
 	## options for ARIES/Ks only
 	delimiter = "\t&"
-	print >>gTex, delimiter.join(["KNNNNN", "KeplerID", "KepMag","Kmag", "Star","Dist","PA","$\Delta_{Ks}$", "$Kep_{Dwarf}$", "\\\\"])
-	delimiter = "\t"
-	print >>g, delimiter.join(["KNNNNN", "KeplerID", "KepMag","Kmag", "Star","Dist","PA","Delta_Ks", "Kep_Dwarf"])
+	print >>gTex, delimiter.join(["KNNNNN", "KeplerID", "KepMag", "Jmag", "Kmag","Filt","Star","Dist","PA","$\Delta_Mag$", "$Kep_{Dwarf}$", "\\\\"])
+	delimiter = "\t" 
+	print >>g, delimiter.join(["KNNNNN", "KeplerID", "KepMag", "Jmag", "Kmag", "Filt", "Star","Dist","PA","Delta_Mag", "Kep_Dwarf"])
 	
-	for filt in filters:
-		for obj in useObjects:
-			firstLineForObj = True # switch this when the first line is output
-			## read in the summary file
-			ss = open(ao.starsFile(obj,instrUsed),"r")
-			lines = ss.readlines()
-			ss.close()
-			fwhm = lines[1].rstrip().split()[2]
-			for line in lines[4:]:
-				elems = line.rstrip().split()
+	for obj in useObjects:
+		firstLineForObj = True # switch this when the first line is output
+		## read in the summary file
+		ss = open(ao.starsFile(obj,instr=instrUsed),"r")
+		lines = ss.readlines()
+		ss.close()
+		## find each filter
+		filtersFound=[]
+		for ii,line in enumerate(lines):
+			elems = line.split("\t")
+			if elems[0] in filters:
+				filtersFound.append(elems[0])
+		
+		## read in the detected stars for each filter
+		fwhm = lines[1].rstrip().split()[2]
+		for line in lines:
+			elems = line.rstrip().split()
+			if elems[0] == 'J':
+				filt = 'J'
+			elif elems[0] == 'Ks':
+				filt = 'Ks'
+			## get rid of headers, also star 0
+			if elems[0] not in ["0","J","Ks","Star","object"]:
+			#	print line, "xx", elems,"xx"
 				num = elems[0]
 				dist = elems[1]
 				deltaMag = elems[2]
@@ -282,13 +294,14 @@ def tableForAllStars(distCutoffArcsec=closeDist, filters =["Ks"], extra=""):
 				try:
 					kepID = ksasDict[obj]["kepid"]
 					kepMag = ksasDict[obj]["kpmag"]
-					### There used to be a bug here! This should return the Kepler magnitude of the COMPANION, not the TARGET
+					### There used to be a bug here (pre April 2013)! This should return the Kepler magnitude of the COMPANION, not the TARGET
 					if filt == "Ks":
 						kepMagDwarf = str(round(kepler.kepMagCiardi("Ks", eval(kMag)+eval(deltaMag)),1))
 					elif filt == "J":
 						kepMagDwarf = str(round(kepler.kepMagCiardi("J", eval(jMag)+eval(deltaMag)),1))
 					else:
 						kepMagDwarf = "--"
+					### Should allow for J AND K, since the transform is better, but matching stars is tricksy
 				except:
 					kepID = "--"
 					kepMag = "--"
@@ -297,10 +310,10 @@ def tableForAllStars(distCutoffArcsec=closeDist, filters =["Ks"], extra=""):
 				### Print info
 				if eval(dist) <= distCutoffArcsec:
 					if (firstLineForObj):
-						output = [obj, kepID, kepMag, kMag, num,dist, pa, deltaMag, kepMagDwarf]
+						output = [obj, kepID, kepMag, jMag, kMag, filt, num,dist, pa, deltaMag, kepMagDwarf]
 						firstLineForObj = False ## for next star
 					else:
-						output = ["--", "--", "--","--",  num, dist, pa, deltaMag, kepMagDwarf]
+						output = ["--", "--", "--","--", "--", filt, num, dist, pa, deltaMag, kepMagDwarf]
 					delimiter = "\t&"
 					print >>gTex, delimiter.join(output), "\\\\"
 					delimiter = "\t"
@@ -308,10 +321,23 @@ def tableForAllStars(distCutoffArcsec=closeDist, filters =["Ks"], extra=""):
 	gTex.close()
 	g.close()
 
+#################################################################################
+###              Create star tables for each object first                     ###
+#################################################################################
+for obj in useObjects:	
+##	tableForEachStar(obj, closeDist)
+	tableForEachStar(obj, farDist)
+#################################################################################
+#################################################################################
 
-#### Run			
+#################################################################################
+###              Create giant summary star tables                             ###
+#################################################################################
+
+
 #tableForAllStars(distCutoffArcsec=closeDist, extra="")
-tableForAllStars(distCutoffArcsec=farDist, extra="_aoIerr")
+#tableForAllStars(distCutoffArcsec=farDist, extra="_aoIerrP")
+tableForAllStars(distCutoffArcsec=farDist, extra="_aoIerr"+instrUsed)
 
 ####### This is to aid step5
 print "\nMade star tables for:"

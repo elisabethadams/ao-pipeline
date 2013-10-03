@@ -6,6 +6,7 @@
 #     This script will, for each object and filter:
 #       1. find all stars on an image
 #       2. determine (interactively) which ones are "good" and output them to a .coo file (target first)
+#       3. produces .coo file
 
 ################## BEGIN PREAMBLE ###########################
 

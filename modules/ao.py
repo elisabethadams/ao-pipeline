@@ -78,8 +78,8 @@ def finalKOIcooFile(koi,filt):
 	return finalKOIimageFile(koi,filt)+".coo"
 def settingsFile(koi, instr="ARIES"):
 	return koiDir(koi,instr) + "settings_"+koi+".tsv"
-def starsFile(koi, filt="Ks", instr="ARIES"):
-	return koiDir(koi, instr) + "stars_"+koi+"_"+filt+".tsv"
+def starsFile(koi, instr="ARIES"):
+	return koiDir(koi, instr) + "stars_"+koi+".tsv"
 def finderPlotName(koi,filt,instr="ARIES",ext="png"):
 	return plotDir+"finders/finder_"+koi+"_"+filt+"_"+instr+"."+ext	
 ## The Shiftlist contains the names of the files used to construct the final image plus the x/y pixel shifts
@@ -195,11 +195,14 @@ def importLimitingMagFile(magFile):
 					distPos=hPos
 				elif hh == "Delta-mag":
 					magPos=hPos
+				elif hh == "Est-Kp-mag":
+					kepMagPos=hPos
 				hPos=hPos+1
 		else:
 			elems=line.split()
 			# Do not evaluate! we want the clean strings
 			deltaMagDict[elems[distPos]]=eval(elems[magPos])
+			deltaMagDict[elems[distPos],"KepMag"]=eval(elems[kepMagPos])
 			allDists.append(elems[distPos])
 	deltaMagDict["annuli"]=allDists
 	return deltaMagDict

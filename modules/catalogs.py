@@ -15,9 +15,9 @@ import grabBag as gb
 import ao
 
 catalogDir = ao.infoDir + "Catalogs/"
-inFile2massKOIs = catalogDir + "2mass/all_2mass_20110923.txt"
+inFile2massKOIs = catalogDir + "2mass/all_2mass_20110923_2.txt"
 inFile2massTransits = catalogDir + "2mass/all_2mass_transits_20120810_verified.txt"
-resultFile2massKOIs = catalogDir + "2mass/all_2mass_20110923_results.tbl"
+resultFile2massKOIs = catalogDir + "2mass/all_2mass_20110923_2_results.tbl"
 resultFile2massTransits = catalogDir + "2mass/all_2mass_transits_20120814.tbl"
 
 

@@ -74,6 +74,8 @@ for obj in useObjects:
 			#	print "Limit file exists:",ao.limMagFile(obj,filt,instrUsed)
 			#else:
 				os.system("./magLimits.py "+obj+" "+filt+" "+instrUsed)
+	#			print("Why aren't I running ./magLimits.py "+obj+" "+filt+" "+instrUsed)
+
 		else:
 			print "No such file:", obj, filt
 

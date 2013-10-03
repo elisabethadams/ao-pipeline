@@ -61,7 +61,6 @@ if instrUsed == "Speckle":
 else:
 	plateScale = eval(settingsDict['Plate_scale_Ks'])
 
-print "USING PLATE SCALE FOR",instrUsed,":",plateScale
 
 
 ### Read in .mag file 
@@ -76,7 +75,7 @@ nSigma=5
 #### We could set the inner angle based on the seeing, but it's easier to just get rid of the close ones later
 
 ### This is set up to mimic the way the code was run back in summer '12
-legacyMode = True
+legacyMode = False
 if legacyMode == True:
 	plateScale = 0.02 ### you'll have a problem if it is actually 0.04
 	### How wide are our annuli?
@@ -92,7 +91,7 @@ if legacyMode == True:
 	annuli = np.array(annuliArcsec) / plateScale
 
 else:
-	####### Redo to guarantee the same apertures
+	####### Redone to guarantee the same apertures
 	aa = np.array([0.05,0.10,0.15,0.20])
 	aa2 = np.array([0.025,0.05,0.10,0.15,0.20])
 	#print aa
@@ -109,7 +108,7 @@ else:
 		annuli = np.array(annuliArcsec) / plateScale
 
 
-print "Annuli:", annuli,"\n"
+##print "Annuli:", annuli,"\n"
 
 
 cr=['\n']
@@ -130,6 +129,9 @@ def getSkyMeanSDinAnnulus(ann,delta=5):
 	iraf.phot.setParam('interac','no')	
 	iraf.fitskypars.setParam('annulus',str(ann))	
 	iraf.fitskypars.setParam('dannulus',str(delta))
+	## NO SIGMA CLIPPING! JUST TO BE SAFE: (6/2013)
+	iraf.fitskypars.setParam('sloclip',"0")
+	iraf.fitskypars.setParam('shiclip',"0")
 
 	iraf.phot(fitsDir+fitsFile,Stdin=cr)	
 	aa, nn, xx, ss = ao.readPhotMagFile(fitsDir,fitsFile,outmag)
@@ -222,5 +224,6 @@ g.close()
 
 #print os.system("more "+limMagFile)
 
-print settingsDict
+#print settingsDict
 print obj, filt, ourMag, kepMag
+print "USING PLATE SCALE FOR",instrUsed,":",plateScale
