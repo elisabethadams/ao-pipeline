@@ -75,6 +75,7 @@ print "1 -- ALL"
 print "2 -- Kepler objects (K*) ONLY"
 print "3 -- Non-Kepler objects (not K*) ONLY"
 print "4 -- Use subset listed in script (copy and paste into step0-setup.py and rerun)\n",scriptSpecifiedObjects
+print "5 -- Enter list of objects next, separated by a space"
 entry = raw_input("Choice (defaults to 1): ")
 useObjects=[]
 if entry == "2":
@@ -87,6 +88,9 @@ elif entry == "3":
 			useObjects.append(obj)
 elif entry == "4":
 	useObjects = scriptSpecifiedObjects
+elif entry == "5":
+	entry = raw_input("Example: K12345 ")
+	useObjects = entry.split(" ")
 else:
 	useObjects = allObjects
 	

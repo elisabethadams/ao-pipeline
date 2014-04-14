@@ -108,37 +108,47 @@ for line in lines[1:]:
 #		print line
 #		print obj, starNum, starFilt,  starDeltaMag, starDist
 
-############################ Import Limits ###############################
+############################ Import Limits ################################
 
-#### Hardcoded for now #####
-extra = "_aoIerr"
-############################
+#### Hardcoded for now, because we have so many different limits around ###
+extra = "_iqaurARIES"
+useFilters = ["Ks"]
+###########################################################################
 
 limitDict={}; fwhmDict={}; magDict={}
 objList = {}
-for filt in ["J","Ks"]:
+for filt in useFilters:
 	magSummaryFile=ao.mainDir+"tables/limitingMagSummary_"+filt+extra+".tsv"
 	g = open(magSummaryFile,"r")
 	lines = g.readlines()
 	g.close()
 	
 	headers = lines[0].split("\t")
-	apertures = headers[3:]
+	apertures1 = headers[4:]
 	objList[filt] = []
 	limitDict[filt] = {}; fwhmDict[filt] = {}; magDict[filt] = {};
 	for line in lines[1:]:
-		elems = line.split("\t")
-		obj = elems[0]
-		fwhm = elems[1]
-		mag2mass = elems[2] # J or K depending
-		limits = elems[3:]
-		limitDict[filt][obj] = limits
-		fwhmDict[filt][obj] = fwhm
-		magDict[filt][obj] = mag2mass
-		objList[filt].append(obj)
-	
+		if line != "\n":
+			elems = line.split("\t")
+			print elems
+			obj = elems[0]
+			filterLongName = elems[1]
+			fwhm = elems[2]
+			mag2mass = elems[3] # J or K depending
+			limits = elems[4:]
+			limitDict[filt][obj] = limits
+			fwhmDict[filt][obj] = fwhm
+			magDict[filt][obj] = mag2mass
+			objList[filt].append(obj)
+
+	apertures=[]
+	for ap in apertures1:
+		apertures.append(string.replace(string.replace(ap,"\"",""),"\n",""))
+	print apertures
+
 	
 ################################ Plot subfunctions ############################
+
 
 def drawLimits(useObjects,filt="Ks",useGrayscale=False):
 	colorDict={}
@@ -238,15 +248,69 @@ def makeCompStarPlot(outPlotFile, plotLimitsForObjects=[], hideLegend=False, tra
 	pylab.savefig(outPlotFile,transparent=transparentBkg)
 	pylab.close()
 
+def makeLimitsPlot(outPlotFile, plotLimitsForObjects=useObjects, hideLegend=False, transparentBkg=False, useFilter="Ks", hack=False,useGrayscale=False):
+	pylab.figure(0,figsize=(9,6))
+	### Add on limits for select objects
+	if plotLimitsForObjects != []:
+		colorDict = drawLimits(plotLimitsForObjects,useFilter,useGrayscale)
+		highlightedObjects = colorDict.keys()
+		print "Highlighting",len(highlightedObjects),"objects:",highlightedObjects
+	else:
+		colorDict = {}
+	#hhhack
+	alreadyDrawn=False
+	### Settings for plot
+	pylab.xlim(xmin=0.08,xmax=11)
+	pylab.ylim(ymin=-0.5,ymax=10)
+	
+	### HACK! IQ Aur's companion star
+	pylab.semilogx(7.32, 3.85, marker="*", linestyle='None', markeredgewidth=0, markersize=15)
+	
+
+	### Y increases up (ie, fainter stuff on top) by default
+	### For Y to decrease down,toggle this...
+	pylab.gca().invert_yaxis()
+	if hideLegend == False:	
+	### ... and toggle this
+		leg = pylab.legend(numpoints=1,loc="lower left")
+	#	leg = pylab.legend(numpoints=1,loc="upper left")
+		for t in leg.get_texts():
+			t.set_fontsize('small')    # the legend text fontsize
+
+	### Now we reformat the plot to make it more legible
+	ax = pylab.gca()
+	## Bold labels and thick axes
+	for tick in ax.xaxis.get_major_ticks():
+		tick.label1.set_fontsize(14)
+		tick.label1.set_fontweight('bold')
+	for tick in ax.yaxis.get_major_ticks():
+		tick.label1.set_fontsize(14)
+		tick.label1.set_fontweight('bold')
+	## Thicker tick marks !! thanks, http://www.krioma.net/blog/2010/05/tickmarks_in_matplotlib.php
+	for l in ax.get_xticklines() + ax.get_yticklines(): 
+	    l.set_markersize(6) 
+	    l.set_markeredgewidth(1.2) 
+	for l in ax.yaxis.get_minorticklines()+ax.xaxis.get_minorticklines():
+		l.set_markersize(3) 
+		l.set_markeredgewidth(1.2)
+	## Linear scale on xaxis
+	from matplotlib.ticker import ScalarFormatter
+#	ax1 = pylab.gca().xaxis
+	ax1 = ax.xaxis
+	ax1.set_major_formatter(ScalarFormatter())
+	## Labels (also in bold)
+	pylab.xlabel('Distance from primary (")', fontsize=16, fontweight='bold')
+	pylab.ylabel('Magnitude Difference', fontsize=16, fontweight='bold')
+	pylab.savefig(outPlotFile,transparent=transparentBkg)
+	pylab.close()
 
 
 ############################## Where things get run ############################
 ## For paper I erratum on 2009-10 limits (now with 50% fewer IRAF errors)
-erratumPlot = ao.plotDir+"KOI_all_observed_erratum.pdf"
-makeCompStarPlot(erratumPlot, plotLimitsForObjects=['K00085','K00098','K00113'],useGrayscale=True)
-makeCompStarPlot(string.replace(erratumPlot,".pdf",".eps"), plotLimitsForObjects=['K00085','K00098','K00113'],useGrayscale=True)
+#erratumPlot = ao.plotDir+"KOI_all_observed_erratum.pdf"
+#makeCompStarPlot(erratumPlot, plotLimitsForObjects=['K00085','K00098','K00113'],useGrayscale=True)
+#makeCompStarPlot(string.replace(erratumPlot,".pdf",".eps"), plotLimitsForObjects=['K00085','K00098','K00113'],useGrayscale=True)
 
-
-
-
-######### Special erratum-evaluation plot: 
+## IQ Aur
+iqaurPlot = ao.plotDir+"IQAur.pdf"
+makeLimitsPlot(iqaurPlot, plotLimitsForObjects=['IQAur'], hideLegend=False, useGrayscale=False)

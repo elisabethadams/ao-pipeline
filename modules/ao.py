@@ -201,8 +201,8 @@ def importLimitingMagFile(magFile):
 		else:
 			elems=line.split()
 			# Do not evaluate! we want the clean strings
-			deltaMagDict[elems[distPos]]=eval(elems[magPos])
-			deltaMagDict[elems[distPos],"KepMag"]=eval(elems[kepMagPos])
+			deltaMagDict[elems[distPos]]=elems[magPos]
+			deltaMagDict[elems[distPos],"KepMag"]=elems[kepMagPos]
 			allDists.append(elems[distPos])
 	deltaMagDict["annuli"]=allDists
 	return deltaMagDict
